@@ -155,8 +155,8 @@ rcv1 = fetch_rcv1()
 X = rcv1.data
 n_samples, n_features = X.shape
 
-# consider the binary classification problem ' CCAT' vs the rest
-ccat_idx = rcv1.target_names.tolist().index(" CCAT")
+# consider the binary classification problem 'CCAT' vs the rest
+ccat_idx = rcv1.target_names.tolist().index("CCAT")
 y = rcv1.target.tocsc()[:, ccat_idx].toarray().ravel().astype(np.float64)
 y[y == 0] = -1
 
