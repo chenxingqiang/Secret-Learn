@@ -4,9 +4,11 @@
 
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![JAX](https://img.shields.io/badge/JAX-0.4.20+-orange.svg)](https://github.com/google/jax)
+[![JAX-sklearn](https://img.shields.io/badge/JAX--sklearn-0.1.0+-red.svg)](https://github.com/chenxingqiang/jax-sklearn)
 [![SecretFlow](https://img.shields.io/badge/SecretFlow-1.0.0+-green.svg)](https://github.com/secretflow/secretflow)
 [![License](https://img.shields.io/badge/license-BSD--3--Clause-green.svg)](COPYING)
 [![Version](https://img.shields.io/badge/version-0.2.0-brightgreen.svg)](https://pypi.org/project/secret-learn/)
+[![sklearn Compatible](https://img.shields.io/badge/sklearn-compatible-blue.svg)](https://scikit-learn.org)
 
 ---
 
@@ -40,7 +42,7 @@
 
 Secret-Learn features a 6-layer architecture that seamlessly integrates JAX acceleration with privacy-preserving computation:
 
-![Secret-Learn Architecture](doc/doc/secret_learn_architecture.svg)
+![Secret-Learn Architecture](doc/secret_learn_architecture.svg)
 
 ### Architecture Layers
 
