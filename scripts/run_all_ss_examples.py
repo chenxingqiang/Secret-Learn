@@ -132,7 +132,7 @@ Duration: {elapsed_time:.2f}s
         return False, elapsed_time
 
 def main():
-    base_dir = Path(__file__).parent
+    base_dir = Path(__file__).parent.parent  # Go to project root
     examples_dir = base_dir / "examples" / "SS"
     log_dir = base_dir / "logs" / "examples" / "SS"
     

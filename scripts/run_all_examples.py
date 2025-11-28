@@ -17,7 +17,7 @@ from datetime import datetime
 def run_mode_examples(mode, force=False):
     """Run examples for specified mode"""
     script_name = f"run_all_{mode.lower()}_examples.py"
-    script_path = Path(__file__).parent / script_name
+    script_path = Path(__file__).parent / script_name  # scripts/run_all_*_examples.py
     
     if not script_path.exists():
         print(f" Script not found: {script_name}")
