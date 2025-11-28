@@ -46,8 +46,8 @@ Line #      Hits         Time  Per Hit   % Time  Line Contents
 import numpy as np
 from scipy.sparse import csr_matrix
 
-from xlearn.linear_model import SGDRegressor
-from xlearn.metrics import r2_score
+from secretlearn.linear_model import SGDRegressor
+from secretlearn.metrics import r2_score
 
 np.random.seed(42)
 

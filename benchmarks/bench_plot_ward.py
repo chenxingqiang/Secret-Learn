@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from scipy.cluster import hierarchy
 
-from xlearn.cluster import AgglomerativeClustering
+from secretlearn.cluster import AgglomerativeClustering
 
 ward = AgglomerativeClustering(n_clusters=3, linkage="ward")
 

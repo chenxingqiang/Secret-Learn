@@ -4,13 +4,13 @@ from time import time
 import numpy as np
 import pandas as pd
 
-from xlearn.compose import make_column_selector, make_column_transformer
-from xlearn.datasets import fetch_openml
-from xlearn.ensemble import HistGradientBoostingClassifier
-from xlearn.ensemble._hist_gradient_boosting.utils import get_equivalent_estimator
-from xlearn.metrics import accuracy_score, roc_auc_score
-from xlearn.model_selection import train_test_split
-from xlearn.preprocessing import OrdinalEncoder
+from secretlearn.compose import make_column_selector, make_column_transformer
+from secretlearn.datasets import fetch_openml
+from secretlearn.ensemble import HistGradientBoostingClassifier
+from secretlearn.ensemble._hist_gradient_boosting.utils import get_equivalent_estimator
+from secretlearn.metrics import accuracy_score, roc_auc_score
+from secretlearn.model_selection import train_test_split
+from secretlearn.preprocessing import OrdinalEncoder
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--n-leaf-nodes", type=int, default=31)
@@ -87,7 +87,7 @@ est = HistGradientBoostingClassifier(
     verbose=verbose,
 )
 
-fit(est, X_train, y_train, "xlearn")
+fit(est, X_train, y_train, "secretlearn")
 predict(est, X_test, y_test)
 
 if args.lightgbm:

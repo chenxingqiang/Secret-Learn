@@ -64,15 +64,15 @@ jobs:
       - name: Install secret-learn
         run: |
           source "${HOME}/conda/etc/profile.d/conda.sh"
-          conda activate xlearn
+          conda activate secretlearn
           pip install ~/dist/cibw-wheels/$(ls ~/dist/cibw-wheels)
 
       - name: Run array API tests
         run: |
           source "${HOME}/conda/etc/profile.d/conda.sh"
-          conda activate xlearn
-          python -c "import xlearn; xlearn.show_versions()"
+          conda activate secretlearn
+          python -c "import secretlearn; secretlearn.show_versions()"
 
-          SCIPY_ARRAY_API=1 pytest --pyargs xlearn -k 'array_api' -v
-        # Run in /home/runner to not load xlearn from the checkout repo
+          SCIPY_ARRAY_API=1 pytest --pyargs secretlearn -k 'array_api' -v
+        # Run in /home/runner to not load secretlearn from the checkout repo
         working-directory: /home/runner

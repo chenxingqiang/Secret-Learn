@@ -76,7 +76,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import scipy as sp
 
-from xlearn.datasets import (
+from secretlearn.datasets import (
     fetch_20newsgroups_vectorized,
     fetch_lfw_people,
     fetch_olivetti_faces,
@@ -85,10 +85,10 @@ from xlearn.datasets import (
     make_low_rank_matrix,
     make_sparse_uncorrelated,
 )
-from xlearn.utils import gen_batches
-from xlearn.utils._arpack import _init_arpack_v0
-from xlearn.utils.extmath import randomized_svd
-from xlearn.utils.validation import check_random_state
+from secretlearn.utils import gen_batches
+from secretlearn.utils._arpack import _init_arpack_v0
+from secretlearn.utils.extmath import randomized_svd
+from secretlearn.utils.validation import check_random_state
 
 try:
     import fbpca
@@ -353,7 +353,7 @@ def bench_a(X, dataset_name, power_iter, n_oversamples, n_comps):
 
     for pi in power_iter:
         for pm in ["none", "LU", "QR"]:
-            print("n_iter = %d on xlearn - %s" % (pi, pm))
+            print("n_iter = %d on secretlearn - %s" % (pi, pm))
             U, s, V, time = svd_timing(
                 X,
                 n_comps,
@@ -361,7 +361,7 @@ def bench_a(X, dataset_name, power_iter, n_oversamples, n_comps):
                 power_iteration_normalizer=pm,
                 n_oversamples=n_oversamples,
             )
-            label = "xlearn - %s" % pm
+            label = "secretlearn - %s" % pm
             all_time[label].append(time)
             if enable_spectral_norm:
                 A = U.dot(np.diag(s).dot(V))
@@ -460,7 +460,7 @@ def bench_c(datasets, n_comps):
         X_fro_norm = norm_diff(X, norm="fro", msg=False)
         n_comps = np.minimum(n_comps, np.min(X.shape))
 
-        label = "xlearn"
+        label = "secretlearn"
         print("%s %d x %d - %s" % (dataset_name, X.shape[0], X.shape[1], label))
         U, s, V, time = svd_timing(X, n_comps, n_iter=2, n_oversamples=10, method=label)
 
@@ -509,7 +509,7 @@ if __name__ == "__main__":
         if X is None:
             continue
         print(
-            " >>>>>> Benching xlearn and fbpca on %s %d x %d"
+            " >>>>>> Benching secretlearn and fbpca on %s %d x %d"
             % (dataset_name, X.shape[0], X.shape[1])
         )
         bench_a(
@@ -523,7 +523,7 @@ if __name__ == "__main__":
     print(" >>>>>> Benching on simulated low rank matrix with variable rank")
     bench_b(power_iter)
 
-    print(" >>>>>> Benching xlearn and fbpca default configurations")
+    print(" >>>>>> Benching secretlearn and fbpca default configurations")
     bench_c(datasets + big_sparse_datasets, n_comps)
 
     plt.show()

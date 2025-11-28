@@ -6,7 +6,7 @@ Benchmark for explicit feature map approximation of polynomial kernels
 An example illustrating the approximation of the feature map
 of an Homogeneous Polynomial kernel.
 
-.. currentmodule:: xlearn.kernel_approximation
+.. currentmodule:: secretlearn.kernel_approximation
 
 It shows how to use :class:`PolynomialCountSketch` and :class:`Nystroem` to
 approximate the feature map of a polynomial kernel for
@@ -50,13 +50,13 @@ from time import time
 import matplotlib.pyplot as plt
 import numpy as np
 
-from xlearn.datasets import load_digits
-from xlearn.kernel_approximation import Nystroem, PolynomialCountSketch
-from xlearn.model_selection import train_test_split
-from xlearn.pipeline import Pipeline
+from secretlearn.datasets import load_digits
+from secretlearn.kernel_approximation import Nystroem, PolynomialCountSketch
+from secretlearn.model_selection import train_test_split
+from secretlearn.pipeline import Pipeline
 
 # Import SVM classifiers and feature map approximation algorithms
-from xlearn.svm import SVC, LinearSVC
+from secretlearn.svm import SVC, LinearSVC
 
 # Split data in train and test sets
 X, y = load_digits()["data"], load_digits()["target"]

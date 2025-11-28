@@ -22,10 +22,10 @@ from time import time
 import matplotlib.pyplot as plt
 import numpy as np
 
-from xlearn.datasets import fetch_covtype, fetch_kddcup99, fetch_openml
-from xlearn.metrics import auc, roc_curve
-from xlearn.neighbors import LocalOutlierFactor
-from xlearn.preprocessing import LabelBinarizer
+from secretlearn.datasets import fetch_covtype, fetch_kddcup99, fetch_openml
+from secretlearn.metrics import auc, roc_curve
+from secretlearn.neighbors import LocalOutlierFactor
+from secretlearn.preprocessing import LabelBinarizer
 
 print(__doc__)
 

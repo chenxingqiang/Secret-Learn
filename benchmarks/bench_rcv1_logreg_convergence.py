@@ -8,9 +8,9 @@ import matplotlib.pyplot as plt
 import numpy as np
 from joblib import Memory
 
-from xlearn.datasets import fetch_rcv1
-from xlearn.linear_model import LogisticRegression, SGDClassifier
-from xlearn.linear_model._sag import get_auto_step_size
+from secretlearn.datasets import fetch_rcv1
+from secretlearn.linear_model import LogisticRegression, SGDClassifier
+from secretlearn.linear_model._sag import get_auto_step_size
 
 try:
     import lightning.classification as lightning_clf

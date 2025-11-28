@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib import ticker
 
-from xlearn import datasets, neighbors
+from secretlearn import datasets, neighbors
 
 
 def get_data(N, D, dataset="dense"):

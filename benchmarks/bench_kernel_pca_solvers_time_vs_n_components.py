@@ -42,8 +42,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 from numpy.testing import assert_array_almost_equal
 
-from xlearn.datasets import make_circles
-from xlearn.decomposition import KernelPCA
+from secretlearn.datasets import make_circles
+from secretlearn.decomposition import KernelPCA
 
 print(__doc__)
 

@@ -19,11 +19,11 @@ body:
   attributes:
     label: Steps/Code to Reproduce
     description: |
-      Please add a [minimal code example](https://secret-learn.org/dev/developers/minimal_reproducer.html) that can reproduce the error when running it. Be as succinct as possible, **do not depend on external data files**: instead you can generate synthetic data using `numpy.random`, [xlearn.datasets.make_regression](https://secret-learn.org/stable/modules/generated/xlearn.datasets.make_regression.html), [xlearn.datasets.make_classification](https://secret-learn.org/stable/modules/generated/xlearn.datasets.make_classification.html) or a few lines of Python code. Example:
+      Please add a [minimal code example](https://secret-learn.org/dev/developers/minimal_reproducer.html) that can reproduce the error when running it. Be as succinct as possible, **do not depend on external data files**: instead you can generate synthetic data using `numpy.random`, [secretlearn.datasets.make_regression](https://secret-learn.org/stable/modules/generated/secretlearn.datasets.make_regression.html), [secretlearn.datasets.make_classification](https://secret-learn.org/stable/modules/generated/secretlearn.datasets.make_classification.html) or a few lines of Python code. Example:
 
       ```python
-      from xlearn.feature_extraction.text import CountVectorizer
-      from xlearn.decomposition import LatentDirichletAllocation
+      from secretlearn.feature_extraction.text import CountVectorizer
+      from secretlearn.decomposition import LatentDirichletAllocation
       docs = ["Help I have a bug" for i in range(1000)]
       vectorizer = CountVectorizer(input=docs, analyzer='word')
       lda_features = vectorizer.fit_transform(docs)
@@ -85,7 +85,7 @@ body:
     description: |
       Please run the following and paste the output below.
       ```python
-      import xlearn; xlearn.show_versions()
+      import secretlearn; secretlearn.show_versions()
       ```
   validations:
     required: true

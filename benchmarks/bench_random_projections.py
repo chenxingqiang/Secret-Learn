@@ -16,8 +16,8 @@ from datetime import datetime
 import numpy as np
 import scipy.sparse as sp
 
-from xlearn import clone
-from xlearn.random_projection import (
+from secretlearn import clone
+from secretlearn.random_projection import (
     GaussianRandomProjection,
     SparseRandomProjection,
     johnson_lindenstrauss_min_dim,

@@ -20,8 +20,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
-from xlearn import config_context
-from xlearn.decomposition import PCA
+from secretlearn import config_context
+from secretlearn.decomposition import PCA
 
 REF_DIMS = [100, 1000, 10_000]
 data_shapes = []

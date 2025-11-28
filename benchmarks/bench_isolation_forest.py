@@ -21,11 +21,11 @@ from time import time
 import matplotlib.pyplot as plt
 import numpy as np
 
-from xlearn.datasets import fetch_covtype, fetch_kddcup99, fetch_openml
-from xlearn.ensemble import IsolationForest
-from xlearn.metrics import auc, roc_curve
-from xlearn.preprocessing import LabelBinarizer
-from xlearn.utils import shuffle as sh
+from secretlearn.datasets import fetch_covtype, fetch_kddcup99, fetch_openml
+from secretlearn.ensemble import IsolationForest
+from secretlearn.metrics import auc, roc_curve
+from secretlearn.preprocessing import LabelBinarizer
+from secretlearn.utils import shuffle as sh
 
 print(__doc__)
 

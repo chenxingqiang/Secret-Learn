@@ -4,13 +4,13 @@ from time import time
 import matplotlib.pyplot as plt
 import numpy as np
 
-from xlearn.datasets import make_classification, make_regression
-from xlearn.ensemble import (
+from secretlearn.datasets import make_classification, make_regression
+from secretlearn.ensemble import (
     HistGradientBoostingClassifier,
     HistGradientBoostingRegressor,
 )
-from xlearn.ensemble._hist_gradient_boosting.utils import get_equivalent_estimator
-from xlearn.model_selection import train_test_split
+from secretlearn.ensemble._hist_gradient_boosting.utils import get_equivalent_estimator
+from secretlearn.model_selection import train_test_split
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--n-leaf-nodes", type=int, default=31)
@@ -102,7 +102,7 @@ def one_run(n_samples):
     assert X_train.shape[0] == n_samples
     assert X_test.shape[0] == n_samples
     print("Data size: %d samples train, %d samples test." % (n_samples, n_samples))
-    print("Fitting a xlearn model...")
+    print("Fitting a secretlearn model...")
     tic = time()
     est = Estimator(
         learning_rate=lr,
@@ -123,13 +123,13 @@ def one_run(n_samples):
             loss = "squared_error"
     est.set_params(loss=loss)
     est.fit(X_train, y_train, sample_weight=sample_weight_train)
-    xlearn_fit_duration = time() - tic
+    secretlearn_fit_duration = time() - tic
     tic = time()
-    xlearn_score = est.score(X_test, y_test)
-    xlearn_score_duration = time() - tic
-    print("score: {:.4f}".format(xlearn_score))
-    print("fit duration: {:.3f}s,".format(xlearn_fit_duration))
-    print("score duration: {:.3f}s,".format(xlearn_score_duration))
+    secretlearn_score = est.score(X_test, y_test)
+    secretlearn_score_duration = time() - tic
+    print("score: {:.4f}".format(secretlearn_score))
+    print("fit duration: {:.3f}s,".format(secretlearn_fit_duration))
+    print("score duration: {:.3f}s,".format(secretlearn_score_duration))
 
     lightgbm_score = None
     lightgbm_fit_duration = None
@@ -187,9 +187,9 @@ def one_run(n_samples):
         print("score duration: {:.3f}s,".format(cat_score_duration))
 
     return (
-        xlearn_score,
-        xlearn_fit_duration,
-        xlearn_score_duration,
+        secretlearn_score,
+        secretlearn_fit_duration,
+        secretlearn_score_duration,
         lightgbm_score,
         lightgbm_fit_duration,
         lightgbm_score_duration,
@@ -207,9 +207,9 @@ n_samples_list = [
     n_samples for n_samples in n_samples_list if n_samples <= args.n_samples_max
 ]
 
-xlearn_scores = []
-xlearn_fit_durations = []
-xlearn_score_durations = []
+secretlearn_scores = []
+secretlearn_fit_durations = []
+secretlearn_score_durations = []
 lightgbm_scores = []
 lightgbm_fit_durations = []
 lightgbm_score_durations = []
@@ -222,9 +222,9 @@ cat_score_durations = []
 
 for n_samples in n_samples_list:
     (
-        xlearn_score,
-        xlearn_fit_duration,
-        xlearn_score_duration,
+        secretlearn_score,
+        secretlearn_fit_duration,
+        secretlearn_score_duration,
         lightgbm_score,
         lightgbm_fit_duration,
         lightgbm_score_duration,
@@ -237,9 +237,9 @@ for n_samples in n_samples_list:
     ) = one_run(n_samples)
 
     for scores, score in (
-        (xlearn_scores, xlearn_score),
-        (xlearn_fit_durations, xlearn_fit_duration),
-        (xlearn_score_durations, xlearn_score_duration),
+        (secretlearn_scores, secretlearn_score),
+        (secretlearn_fit_durations, secretlearn_fit_duration),
+        (secretlearn_score_durations, secretlearn_score_duration),
         (lightgbm_scores, lightgbm_score),
         (lightgbm_fit_durations, lightgbm_fit_duration),
         (lightgbm_score_durations, lightgbm_score_duration),
@@ -254,9 +254,9 @@ for n_samples in n_samples_list:
 
 fig, axs = plt.subplots(3, sharex=True)
 
-axs[0].plot(n_samples_list, xlearn_scores, label="xlearn")
-axs[1].plot(n_samples_list, xlearn_fit_durations, label="xlearn")
-axs[2].plot(n_samples_list, xlearn_score_durations, label="xlearn")
+axs[0].plot(n_samples_list, secretlearn_scores, label="secretlearn")
+axs[1].plot(n_samples_list, secretlearn_fit_durations, label="secretlearn")
+axs[2].plot(n_samples_list, secretlearn_score_durations, label="secretlearn")
 
 if args.lightgbm:
     axs[0].plot(n_samples_list, lightgbm_scores, label="lightgbm")

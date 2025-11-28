@@ -51,18 +51,18 @@ from time import time
 import numpy as np
 from joblib import Memory
 
-from xlearn.datasets import fetch_covtype, get_data_home
-from xlearn.ensemble import (
+from secretlearn.datasets import fetch_covtype, get_data_home
+from secretlearn.ensemble import (
     ExtraTreesClassifier,
     GradientBoostingClassifier,
     RandomForestClassifier,
 )
-from xlearn.linear_model import LogisticRegression, SGDClassifier
-from xlearn.metrics import zero_one_loss
-from xlearn.naive_bayes import GaussianNB
-from xlearn.svm import LinearSVC
-from xlearn.tree import DecisionTreeClassifier
-from xlearn.utils import check_array
+from secretlearn.linear_model import LogisticRegression, SGDClassifier
+from secretlearn.metrics import zero_one_loss
+from secretlearn.naive_bayes import GaussianNB
+from secretlearn.svm import LinearSVC
+from secretlearn.tree import DecisionTreeClassifier
+from secretlearn.utils import check_array
 
 # Memoize the data extraction and memory map the resulting
 # train / test splits in readonly mode

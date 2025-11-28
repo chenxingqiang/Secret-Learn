@@ -76,7 +76,7 @@ jobs:
           # release with https://github.com/joblib/joblib/pull/1721
           CIBW_TEST_REQUIRES: "pytest pandas joblib!=1.5.0"
           # -s pytest argument is needed to avoid an issue in pytest output capturing with Pyodide
-          CIBW_TEST_COMMAND: "python -m pytest -svra --pyargs xlearn --durations 20 --showlocals"
+          CIBW_TEST_COMMAND: "python -m pytest -svra --pyargs secretlearn --durations 20 --showlocals"
 
       - name: Upload wheel artifact
         uses: actions/upload-artifact@v4

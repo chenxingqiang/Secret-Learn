@@ -13,14 +13,14 @@ import matplotlib.pyplot as plt
 import numpy as np
 import scipy.sparse as sp
 
-from xlearn.datasets import make_multilabel_classification
-from xlearn.metrics import (
+from secretlearn.datasets import make_multilabel_classification
+from secretlearn.metrics import (
     accuracy_score,
     f1_score,
     hamming_loss,
     jaccard_similarity_score,
 )
-from xlearn.utils._testing import ignore_warnings
+from secretlearn.utils._testing import ignore_warnings
 
 METRICS = {
     "f1": partial(f1_score, average="micro"),

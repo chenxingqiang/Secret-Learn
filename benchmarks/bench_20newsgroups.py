@@ -3,17 +3,17 @@ from time import time
 
 import numpy as np
 
-from xlearn.datasets import fetch_20newsgroups_vectorized
-from xlearn.dummy import DummyClassifier
-from xlearn.ensemble import (
+from secretlearn.datasets import fetch_20newsgroups_vectorized
+from secretlearn.dummy import DummyClassifier
+from secretlearn.ensemble import (
     AdaBoostClassifier,
     ExtraTreesClassifier,
     RandomForestClassifier,
 )
-from xlearn.linear_model import LogisticRegression
-from xlearn.metrics import accuracy_score
-from xlearn.naive_bayes import MultinomialNB
-from xlearn.utils.validation import check_array
+from secretlearn.linear_model import LogisticRegression
+from secretlearn.metrics import accuracy_score
+from secretlearn.naive_bayes import MultinomialNB
+from secretlearn.utils.validation import check_array
 
 ESTIMATORS = {
     "dummy": DummyClassifier(),

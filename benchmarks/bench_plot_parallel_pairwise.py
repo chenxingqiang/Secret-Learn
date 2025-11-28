@@ -5,8 +5,8 @@ import time
 
 import matplotlib.pyplot as plt
 
-from xlearn.metrics.pairwise import pairwise_distances, pairwise_kernels
-from xlearn.utils import check_random_state
+from secretlearn.metrics.pairwise import pairwise_distances, pairwise_kernels
+from secretlearn.utils import check_random_state
 
 
 def plot(func):

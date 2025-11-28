@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import scipy.sparse as sparse
 
-from xlearn.preprocessing import PolynomialFeatures
+from secretlearn.preprocessing import PolynomialFeatures
 
 degree = 2
 trials = 3

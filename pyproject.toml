@@ -3,8 +3,11 @@ name = "secret-learn"
 version = "0.1.1"
 description = "Privacy-preserving machine learning with SecretFlow - 348 sklearn-compatible algorithms (FL/SL/SS modes)"
 readme = "README.md"
+authors = [
+    {name = "Chen Xingqiang", email="joy6677@outlook.com"},
+]
 maintainers = [
-    {name = "Secret-Learn developers", email="secret-learn@python.org"},
+    {name = "Secret-Learn developers", email="joy6677@outlook.com"},
 ]
 dependencies = [
   "numpy>=1.22.0",
@@ -13,8 +16,8 @@ dependencies = [
   "threadpoolctl>=3.1.0",
   "jax>=0.4.20",
   "jaxlib>=0.4.20",
-  "jax-sklearn>=0.1.0",  # Base JAX-sklearn implementation
-  "secretflow>=1.0.0",   # SecretFlow for privacy-preserving computation
+  "jax-sklearn>=0.1.0",
+  "secretflow>=0.7.0",
 ]
 requires-python = ">=3.10"
 license = "BSD-3-Clause"
@@ -22,8 +25,13 @@ license-files = ["COPYING"]
 classifiers=[
   "Intended Audience :: Science/Research",
   "Intended Audience :: Developers",
-  "Programming Language :: C",
   "Programming Language :: Python",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: Implementation :: CPython",
   "Topic :: Software Development",
   "Topic :: Scientific/Engineering",
   "Topic :: Scientific/Engineering :: Artificial Intelligence",
@@ -33,13 +41,6 @@ classifiers=[
   "Operating System :: POSIX",
   "Operating System :: Unix",
   "Operating System :: MacOS",
-  "Programming Language :: Python :: 3",
-  "Programming Language :: Python :: 3.10",
-  "Programming Language :: Python :: 3.11",
-  "Programming Language :: Python :: 3.12",
-  "Programming Language :: Python :: 3.13",
-  "Programming Language :: Python :: Implementation :: CPython",
-  "License :: OSI Approved :: BSD License",
 ]
 
 [project.urls]
@@ -52,21 +53,14 @@ documentation = "https://github.com/chenxingqiang/secret-learn#readme"
 "SecretFlow" = "https://github.com/secretflow/secretflow"
 
 [project.optional-dependencies]
-build = ["numpy>=1.22.0", "scipy>=1.8.0", "cython>=3.0.10", "meson-python>=0.17.1"]
-install = [
-    "numpy>=1.22.0",
-    "scipy>=1.8.0",
-    "joblib>=1.2.0",
-    "threadpoolctl>=3.1.0",
-    "jax>=0.4.20",
-    "jaxlib>=0.4.20",
+all = [
     "jax-sklearn>=0.1.0",
-    "secretflow>=1.0.0",
+    "secretflow>=0.7.7b0",
 ]
-jax = ["jax>=0.4.20", "jaxlib>=0.4.20"]
+jax-sklearn = ["jax-sklearn>=0.1.0"]
+secretflow = ["secretflow>=0.7.7b0"]
 jax-cpu = ["jax[cpu]>=0.4.20"]
 jax-gpu = ["jax[gpu]>=0.4.20"]
-secretflow = ["secretflow>=1.0.0"]
 benchmark = ["matplotlib>=3.5.0", "pandas>=1.4.0", "memory_profiler>=0.57.0"]
 docs = [
     "matplotlib>=3.5.0",
@@ -116,18 +110,18 @@ tests = [
 maintenance = ["conda-lock==3.0.1"]
 
 [build-system]
-build-backend = "mesonpy"
-# Minimum requirements for the build system to execute.
-requires = [
-    "meson-python>=0.16.0,<0.19.0",
-    "Cython>=3.0.10,<3.2.0",
-    "numpy>=2,<2.3.0",
-    "scipy>=1.8.0,<1.16.0",
-]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = {find = {where = ["."], include = ["secretlearn*"]}}
+
+[tool.setuptools.package-data]
+secretlearn = ["**/*.py"]
 
 [tool.pytest.ini_options]
 doctest_optionflags = "NORMALIZE_WHITESPACE ELLIPSIS"
-testpaths = "xlearn"
+testpaths = "secretlearn"
 addopts = [
     "--disable-pytest-warnings",
     "--color=yes",
@@ -144,7 +138,6 @@ exclude=[
     "__pycache__",
     "build",
     "dist",
-    "xlearn/externals",
     "doc/_build",
     "doc/auto_examples",
     "asv_benchmarks/env",
@@ -207,7 +200,7 @@ notice-rgx = "\\#\\ Authors:\\ The\\ scikit\\-learn\\ developers\\\r?\\\n\\#\\ S
 "benchmarks/*"=["CPY001"]
 "doc/*"=["CPY001"]
 "build_tools/*"=["CPY001"]
-"xlearn/_build_utils/*"=["CPY001"]
+"secretlearn/_build_utils/*"=["CPY001"]
 "maint_tools/*"=["CPY001"]
 ".spin/*"=["CPY001"]
 ".github/*"=["CPY001"]
@@ -215,16 +208,16 @@ notice-rgx = "\\#\\ Authors:\\ The\\ scikit\\-learn\\ developers\\\r?\\\n\\#\\ S
 "examples/model_selection/plot_precision_recall.py"=["CPY001"]
 "examples/svm/plot_rbf_parameters.py"=["CPY001"]
 # __all__ has un-imported names
-"xlearn/__init__.py"=["F822"]
-"xlearn/utils/_metadata_requests.py"=["CPY001"]
+"secretlearn/__init__.py"=["F822"]
+"secretlearn/utils/_metadata_requests.py"=["CPY001"]
 
 [tool.mypy]
 ignore_missing_imports = true
 allow_redefinition = true
-exclude = "^xlearn/externals"
+exclude = "^secretlearn/externals"
 
 [[tool.mypy.overrides]]
-module = ["joblib.*", "xlearn.externals.*"]
+module = ["joblib.*"]
 follow_imports = "skip"
 
 [tool.cython-lint]
@@ -246,40 +239,17 @@ ignore = [
     'W504',
 ]
 # Exclude files are generated from tempita templates
-exclude= '''
-(
-    asv_benchmarks/
-  | xlearn/_loss/_loss.pyx
-  | xlearn/linear_model/_sag_fast.pyx
-  | xlearn/linear_model/_sgd_fast.pyx
-  | xlearn/utils/_seq_dataset.pyx
-  | xlearn/utils/_seq_dataset.pxd
-  | xlearn/utils/_weight_vector.pyx
-  | xlearn/utils/_weight_vector.pxd
-  | xlearn/metrics/_dist_metrics.pyx
-  | xlearn/metrics/_dist_metrics.pxd
-  | xlearn/metrics/_pairwise_distances_reduction/_argkmin.pxd
-  | xlearn/metrics/_pairwise_distances_reduction/_argkmin.pyx
-  | xlearn/metrics/_pairwise_distances_reduction/_argkmin_classmode.pyx
-  | xlearn/metrics/_pairwise_distances_reduction/_base.pxd
-  | xlearn/metrics/_pairwise_distances_reduction/_base.pyx
-  | xlearn/metrics/_pairwise_distances_reduction/_datasets_pair.pxd
-  | xlearn/metrics/_pairwise_distances_reduction/_datasets_pair.pyx
-  | xlearn/metrics/_pairwise_distances_reduction/_middle_term_computer.pxd
-  | xlearn/metrics/_pairwise_distances_reduction/_middle_term_computer.pyx
-  | xlearn/metrics/_pairwise_distances_reduction/_radius_neighbors.pxd
-  | xlearn/metrics/_pairwise_distances_reduction/_radius_neighbors.pyx
-)
-'''
+exclude= []
+
 
 [tool.check-sdist]
 # These settings should match .gitattributes
 sdist-only = []
-git-only = [".*", "asv_benchmarks", "azure-pipelines.yml", "benchmarks", "build_tools", "maint_tools"]
+git-only = [".*", "azure-pipelines.yml", "benchmarks", "build_tools", "maint_tools"]
 default-ignore = false
 
 [tool.spin]
-package = "xlearn"  # name of your package
+package = "secretlearn"  # name of your package
 
 [tool.spin.commands]
 "Build" = [
@@ -299,11 +269,11 @@ package = "xlearn"  # name of your package
         whatsnew_pattern = 'doc/whatsnew/upcoming_changes/[^/]+/\d+\.[^.]+\.rst'
 
 [tool.codespell]
-skip = ["./.git", "*.svg", "./.mypy_cache", "./xlearn/feature_extraction/_stop_words.py", "./xlearn/feature_extraction/tests/test_text.py", "./build_tools/wheels/LICENSE_windows.txt", "./doc/_build", "./doc/auto_examples", "./doc/modules/generated"]
+skip = ["./.git", "*.svg", "./.mypy_cache", "./secretlearn/feature_extraction/_stop_words.py", "./secretlearn/feature_extraction/tests/test_text.py", "./build_tools/wheels/LICENSE_windows.txt", "./doc/_build", "./doc/auto_examples", "./doc/modules/generated"]
 ignore-words = "build_tools/codespell_ignore_words.txt"
 
 [tool.towncrier]
-    package = "xlearn"
+    package = "secretlearn"
     filename = "doc/whats_new/v1.7.rst"
     single_file = true
     directory = "doc/whats_new/upcoming_changes"
@@ -371,153 +341,153 @@ ignore-words = "build_tools/codespell_ignore_words.txt"
         path = "custom-top-level"
 
     [[tool.towncrier.section]]
-        name = ":mod:`xlearn.base`"
-        path = "xlearn.base"
+        name = ":mod:`secretlearn.base`"
+        path = "secretlearn.base"
 
     [[tool.towncrier.section]]
-        name = ":mod:`xlearn.calibration`"
-        path = "xlearn.calibration"
+        name = ":mod:`secretlearn.calibration`"
+        path = "secretlearn.calibration"
 
     [[tool.towncrier.section]]
-        name = ":mod:`xlearn.cluster`"
-        path = "xlearn.cluster"
+        name = ":mod:`secretlearn.cluster`"
+        path = "secretlearn.cluster"
 
     [[tool.towncrier.section]]
-        name = ":mod:`xlearn.compose`"
-        path = "xlearn.compose"
+        name = ":mod:`secretlearn.compose`"
+        path = "secretlearn.compose"
 
     [[tool.towncrier.section]]
-        name = ":mod:`xlearn.covariance`"
-        path = "xlearn.covariance"
+        name = ":mod:`secretlearn.covariance`"
+        path = "secretlearn.covariance"
 
     [[tool.towncrier.section]]
-        name = ":mod:`xlearn.cross_decomposition`"
-        path = "xlearn.cross_decomposition"
+        name = ":mod:`secretlearn.cross_decomposition`"
+        path = "secretlearn.cross_decomposition"
 
     [[tool.towncrier.section]]
-        name = ":mod:`xlearn.datasets`"
-        path = "xlearn.datasets"
+        name = ":mod:`secretlearn.datasets`"
+        path = "secretlearn.datasets"
 
     [[tool.towncrier.section]]
-        name = ":mod:`xlearn.decomposition`"
-        path = "xlearn.decomposition"
+        name = ":mod:`secretlearn.decomposition`"
+        path = "secretlearn.decomposition"
 
     [[tool.towncrier.section]]
-        name = ":mod:`xlearn.discriminant_analysis`"
-        path = "xlearn.discriminant_analysis"
+        name = ":mod:`secretlearn.discriminant_analysis`"
+        path = "secretlearn.discriminant_analysis"
 
     [[tool.towncrier.section]]
-        name = ":mod:`xlearn.dummy`"
-        path = "xlearn.dummy"
+        name = ":mod:`secretlearn.dummy`"
+        path = "secretlearn.dummy"
 
     [[tool.towncrier.section]]
-        name = ":mod:`xlearn.ensemble`"
-        path = "xlearn.ensemble"
+        name = ":mod:`secretlearn.ensemble`"
+        path = "secretlearn.ensemble"
 
     [[tool.towncrier.section]]
-        name = ":mod:`xlearn.exceptions`"
-        path = "xlearn.exceptions"
+        name = ":mod:`secretlearn.exceptions`"
+        path = "secretlearn.exceptions"
 
     [[tool.towncrier.section]]
-        name = ":mod:`xlearn.feature_extraction`"
-        path = "xlearn.feature_extraction"
+        name = ":mod:`secretlearn.feature_extraction`"
+        path = "secretlearn.feature_extraction"
 
     [[tool.towncrier.section]]
-        name = ":mod:`xlearn.feature_selection`"
-        path = "xlearn.feature_selection"
+        name = ":mod:`secretlearn.feature_selection`"
+        path = "secretlearn.feature_selection"
 
     [[tool.towncrier.section]]
-        name = ":mod:`xlearn.frozen`"
-        path = "xlearn.frozen"
+        name = ":mod:`secretlearn.frozen`"
+        path = "secretlearn.frozen"
 
     [[tool.towncrier.section]]
-        name = ":mod:`xlearn.gaussian_process`"
-        path = "xlearn.gaussian_process"
+        name = ":mod:`secretlearn.gaussian_process`"
+        path = "secretlearn.gaussian_process"
 
     [[tool.towncrier.section]]
-        name = ":mod:`xlearn.impute`"
-        path = "xlearn.impute"
+        name = ":mod:`secretlearn.impute`"
+        path = "secretlearn.impute"
 
     [[tool.towncrier.section]]
-        name = ":mod:`xlearn.inspection`"
-        path = "xlearn.inspection"
+        name = ":mod:`secretlearn.inspection`"
+        path = "secretlearn.inspection"
 
     [[tool.towncrier.section]]
-        name = ":mod:`xlearn.isotonic`"
-        path = "xlearn.isotonic"
+        name = ":mod:`secretlearn.isotonic`"
+        path = "secretlearn.isotonic"
 
     [[tool.towncrier.section]]
-        name = ":mod:`xlearn.kernel_approximation`"
-        path = "xlearn.kernel_approximation"
+        name = ":mod:`secretlearn.kernel_approximation`"
+        path = "secretlearn.kernel_approximation"
 
     [[tool.towncrier.section]]
-        name = ":mod:`xlearn.kernel_ridge`"
-        path = "xlearn.kernel_ridge"
+        name = ":mod:`secretlearn.kernel_ridge`"
+        path = "secretlearn.kernel_ridge"
 
     [[tool.towncrier.section]]
-        name = ":mod:`xlearn.linear_model`"
-        path = "xlearn.linear_model"
+        name = ":mod:`secretlearn.linear_model`"
+        path = "secretlearn.linear_model"
 
     [[tool.towncrier.section]]
-        name = ":mod:`xlearn.manifold`"
-        path = "xlearn.manifold"
+        name = ":mod:`secretlearn.manifold`"
+        path = "secretlearn.manifold"
 
     [[tool.towncrier.section]]
-        name = ":mod:`xlearn.metrics`"
-        path = "xlearn.metrics"
+        name = ":mod:`secretlearn.metrics`"
+        path = "secretlearn.metrics"
 
     [[tool.towncrier.section]]
-        name = ":mod:`xlearn.mixture`"
-        path = "xlearn.mixture"
+        name = ":mod:`secretlearn.mixture`"
+        path = "secretlearn.mixture"
 
     [[tool.towncrier.section]]
-        name = ":mod:`xlearn.model_selection`"
-        path = "xlearn.model_selection"
+        name = ":mod:`secretlearn.model_selection`"
+        path = "secretlearn.model_selection"
 
     [[tool.towncrier.section]]
-        name = ":mod:`xlearn.multiclass`"
-        path = "xlearn.multiclass"
+        name = ":mod:`secretlearn.multiclass`"
+        path = "secretlearn.multiclass"
 
     [[tool.towncrier.section]]
-        name = ":mod:`xlearn.multioutput`"
-        path = "xlearn.multioutput"
+        name = ":mod:`secretlearn.multioutput`"
+        path = "secretlearn.multioutput"
 
     [[tool.towncrier.section]]
-        name = ":mod:`xlearn.naive_bayes`"
-        path = "xlearn.naive_bayes"
+        name = ":mod:`secretlearn.naive_bayes`"
+        path = "secretlearn.naive_bayes"
 
     [[tool.towncrier.section]]
-        name = ":mod:`xlearn.neighbors`"
-        path = "xlearn.neighbors"
+        name = ":mod:`secretlearn.neighbors`"
+        path = "secretlearn.neighbors"
 
     [[tool.towncrier.section]]
-        name = ":mod:`xlearn.neural_network`"
-        path = "xlearn.neural_network"
+        name = ":mod:`secretlearn.neural_network`"
+        path = "secretlearn.neural_network"
 
     [[tool.towncrier.section]]
-        name = ":mod:`xlearn.pipeline`"
-        path = "xlearn.pipeline"
+        name = ":mod:`secretlearn.pipeline`"
+        path = "secretlearn.pipeline"
 
     [[tool.towncrier.section]]
-        name = ":mod:`xlearn.preprocessing`"
-        path = "xlearn.preprocessing"
+        name = ":mod:`secretlearn.preprocessing`"
+        path = "secretlearn.preprocessing"
 
     [[tool.towncrier.section]]
-        name = ":mod:`xlearn.random_projection`"
-        path = "xlearn.random_projection"
+        name = ":mod:`secretlearn.random_projection`"
+        path = "secretlearn.random_projection"
 
     [[tool.towncrier.section]]
-        name = ":mod:`xlearn.semi_supervised`"
-        path = "xlearn.semi_supervised"
+        name = ":mod:`secretlearn.semi_supervised`"
+        path = "secretlearn.semi_supervised"
 
     [[tool.towncrier.section]]
-        name = ":mod:`xlearn.svm`"
-        path = "xlearn.svm"
+        name = ":mod:`secretlearn.svm`"
+        path = "secretlearn.svm"
 
     [[tool.towncrier.section]]
-        name = ":mod:`xlearn.tree`"
-        path = "xlearn.tree"
+        name = ":mod:`secretlearn.tree`"
+        path = "secretlearn.tree"
 
     [[tool.towncrier.section]]
-        name = ":mod:`xlearn.utils`"
-        path = "xlearn.utils"
+        name = ":mod:`secretlearn.utils`"
+        path = "secretlearn.utils"

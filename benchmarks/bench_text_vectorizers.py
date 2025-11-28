@@ -16,8 +16,8 @@ import numpy as np
 import pandas as pd
 from memory_profiler import memory_usage
 
-from xlearn.datasets import fetch_20newsgroups
-from xlearn.feature_extraction.text import (
+from secretlearn.datasets import fetch_20newsgroups
+from secretlearn.feature_extraction.text import (
     CountVectorizer,
     HashingVectorizer,
     TfidfVectorizer,

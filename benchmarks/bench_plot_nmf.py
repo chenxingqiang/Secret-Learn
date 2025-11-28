@@ -15,14 +15,14 @@ import numpy as np
 import pandas
 from joblib import Memory
 
-from xlearn.decomposition import NMF
-from xlearn.decomposition._nmf import _beta_divergence, _check_init, _initialize_nmf
-from xlearn.exceptions import ConvergenceWarning
-from xlearn.feature_extraction.text import TfidfVectorizer
-from xlearn.utils import check_array
-from xlearn.utils._testing import ignore_warnings
-from xlearn.utils.extmath import safe_sparse_dot, squared_norm
-from xlearn.utils.validation import check_is_fitted, check_non_negative
+from secretlearn.decomposition import NMF
+from secretlearn.decomposition._nmf import _beta_divergence, _check_init, _initialize_nmf
+from secretlearn.exceptions import ConvergenceWarning
+from secretlearn.feature_extraction.text import TfidfVectorizer
+from secretlearn.utils import check_array
+from secretlearn.utils._testing import ignore_warnings
+from secretlearn.utils.extmath import safe_sparse_dot, squared_norm
+from secretlearn.utils.validation import check_is_fitted, check_non_negative
 
 mem = Memory(cachedir=".", verbose=0)
 
@@ -409,7 +409,7 @@ def run_bench(X, clfs, plot_name, n_components, tol, alpha, l1_ratio):
 def load_20news():
     print("Loading 20 newsgroups dataset")
     print("-----------------------------")
-    from xlearn.datasets import fetch_20newsgroups
+    from secretlearn.datasets import fetch_20newsgroups
 
     dataset = fetch_20newsgroups(
         shuffle=True, random_state=1, remove=("headers", "footers", "quotes")
@@ -422,7 +422,7 @@ def load_20news():
 def load_faces():
     print("Loading Olivetti face dataset")
     print("-----------------------------")
-    from xlearn.datasets import fetch_olivetti_faces
+    from secretlearn.datasets import fetch_olivetti_faces
 
     faces = fetch_olivetti_faces(shuffle=True)
     return faces.data

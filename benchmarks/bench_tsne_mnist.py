@@ -16,13 +16,13 @@ from time import time
 import numpy as np
 from joblib import Memory
 
-from xlearn.datasets import fetch_openml
-from xlearn.decomposition import PCA
-from xlearn.manifold import TSNE
-from xlearn.neighbors import NearestNeighbors
-from xlearn.utils import check_array
-from xlearn.utils import shuffle as _shuffle
-from xlearn.utils._openmp_helpers import _openmp_effective_n_threads
+from secretlearn.datasets import fetch_openml
+from secretlearn.decomposition import PCA
+from secretlearn.manifold import TSNE
+from secretlearn.neighbors import NearestNeighbors
+from secretlearn.utils import check_array
+from secretlearn.utils import shuffle as _shuffle
+from secretlearn.utils._openmp_helpers import _openmp_effective_n_threads
 
 LOG_DIR = "mnist_tsne_output"
 if not os.path.exists(LOG_DIR):
@@ -124,7 +124,7 @@ if __name__ == "__main__":
         verbose=args.verbose,
         n_iter=1000,
     )
-    methods.append(("xlearn TSNE", lambda data: tsne_fit_transform(tsne, data)))
+    methods.append(("secretlearn TSNE", lambda data: tsne_fit_transform(tsne, data)))
 
     if args.bhtsne:
         try:

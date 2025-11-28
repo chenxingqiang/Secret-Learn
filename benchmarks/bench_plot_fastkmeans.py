@@ -4,7 +4,7 @@ from time import time
 import numpy as np
 from numpy import random as nr
 
-from xlearn.cluster import KMeans, MiniBatchKMeans
+from secretlearn.cluster import KMeans, MiniBatchKMeans
 
 
 def compute_bench(samples_range, features_range):

@@ -14,8 +14,8 @@ from time import time
 import matplotlib.pyplot as plt
 import numpy as np
 
-from xlearn.datasets import fetch_lfw_people
-from xlearn.decomposition import PCA, IncrementalPCA
+from secretlearn.datasets import fetch_lfw_people
+from secretlearn.decomposition import PCA, IncrementalPCA
 
 
 def plot_results(X, y, label):

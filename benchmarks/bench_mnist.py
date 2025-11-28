@@ -36,17 +36,17 @@ from time import time
 import numpy as np
 from joblib import Memory
 
-from xlearn.datasets import fetch_openml, get_data_home
-from xlearn.dummy import DummyClassifier
-from xlearn.ensemble import ExtraTreesClassifier, RandomForestClassifier
-from xlearn.kernel_approximation import Nystroem, RBFSampler
-from xlearn.linear_model import LogisticRegression
-from xlearn.metrics import zero_one_loss
-from xlearn.neural_network import MLPClassifier
-from xlearn.pipeline import make_pipeline
-from xlearn.svm import LinearSVC
-from xlearn.tree import DecisionTreeClassifier
-from xlearn.utils import check_array
+from secretlearn.datasets import fetch_openml, get_data_home
+from secretlearn.dummy import DummyClassifier
+from secretlearn.ensemble import ExtraTreesClassifier, RandomForestClassifier
+from secretlearn.kernel_approximation import Nystroem, RBFSampler
+from secretlearn.linear_model import LogisticRegression
+from secretlearn.metrics import zero_one_loss
+from secretlearn.neural_network import MLPClassifier
+from secretlearn.pipeline import make_pipeline
+from secretlearn.svm import LinearSVC
+from secretlearn.tree import DecisionTreeClassifier
+from secretlearn.utils import check_array
 
 # Memoize the data extraction and memory map the resulting
 # train / test splits in readonly mode

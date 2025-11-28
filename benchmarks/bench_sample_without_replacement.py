@@ -13,7 +13,7 @@ from datetime import datetime
 import matplotlib.pyplot as plt
 import numpy as np
 
-from xlearn.utils.random import sample_without_replacement
+from secretlearn.utils.random import sample_without_replacement
 
 
 def compute_time(t_start, delta):

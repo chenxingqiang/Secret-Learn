@@ -10,8 +10,8 @@ from time import time
 
 import numpy as np
 
-from xlearn.datasets import make_sparse_coded_signal
-from xlearn.linear_model import lars_path, lars_path_gram, orthogonal_mp
+from secretlearn.datasets import make_sparse_coded_signal
+from secretlearn.linear_model import lars_path, lars_path_gram, orthogonal_mp
 
 
 def compute_bench(samples_range, features_range):

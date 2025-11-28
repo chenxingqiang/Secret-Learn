@@ -8,10 +8,10 @@ import numpy as np
 import pandas as pd
 from joblib import Memory
 
-from xlearn.ensemble import HistGradientBoostingClassifier
-from xlearn.ensemble._hist_gradient_boosting.utils import get_equivalent_estimator
-from xlearn.metrics import accuracy_score, roc_auc_score
-from xlearn.model_selection import train_test_split
+from secretlearn.ensemble import HistGradientBoostingClassifier
+from secretlearn.ensemble._hist_gradient_boosting.utils import get_equivalent_estimator
+from secretlearn.metrics import accuracy_score, roc_auc_score
+from secretlearn.model_selection import train_test_split
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--n-leaf-nodes", type=int, default=31)
@@ -108,7 +108,7 @@ est = HistGradientBoostingClassifier(
     interaction_cst=interaction_cst,
     max_features=max_features,
 )
-fit(est, data_train, target_train, "xlearn")
+fit(est, data_train, target_train, "secretlearn")
 predict(est, data_test, target_test)
 
 if args.lightgbm:

@@ -21,14 +21,14 @@ import matplotlib.pyplot as plt
 import numpy as np
 from scipy.interpolate import interp1d
 
-from xlearn.datasets import fetch_covtype, fetch_kddcup99
-from xlearn.kernel_approximation import Nystroem
-from xlearn.linear_model import SGDOneClassSVM
-from xlearn.metrics import auc, roc_curve
-from xlearn.pipeline import make_pipeline
-from xlearn.preprocessing import LabelBinarizer, StandardScaler
-from xlearn.svm import OneClassSVM
-from xlearn.utils import shuffle
+from secretlearn.datasets import fetch_covtype, fetch_kddcup99
+from secretlearn.kernel_approximation import Nystroem
+from secretlearn.linear_model import SGDOneClassSVM
+from secretlearn.metrics import auc, roc_curve
+from secretlearn.pipeline import make_pipeline
+from secretlearn.preprocessing import LabelBinarizer, StandardScaler
+from secretlearn.svm import OneClassSVM
+from secretlearn.utils import shuffle
 
 font = {"weight": "normal", "size": 15}
 

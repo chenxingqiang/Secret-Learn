@@ -40,7 +40,7 @@ import numpy as np
 import pandas as pd
 from joblib import parallel_config
 
-from xlearn.ensemble import IsolationForest
+from secretlearn.ensemble import IsolationForest
 
 print(__doc__)
 
