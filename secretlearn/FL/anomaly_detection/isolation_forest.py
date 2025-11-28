@@ -87,8 +87,8 @@ class FLIsolationForest:
     
     def __init__(
         self,
-        devices: Dict[str, PYU],
-        heu: Optional[HEU] = None,
+        devices: Dict[str, 'PYU'],
+        heu: Optional['HEU'] = None,
         aggregation_method: str = 'mean',
         **kwargs
     ):
@@ -122,7 +122,7 @@ class FLIsolationForest:
         """Create local IsolationForest instance"""
         return IsolationForest(**kwargs)
     
-    def fit(self, x: Union[FedNdarray, VDataFrame]):
+    def fit(self, x: 'Union[FedNdarray, VDataFrame]'):
         """
         Fit the federated IsolationForest model
         
@@ -167,7 +167,7 @@ class FLIsolationForest:
         logging.info("[FL] Federated IsolationForest training completed")
         return self
     
-    def predict(self, x: Union[FedNdarray, VDataFrame]):
+    def predict(self, x: 'Union[FedNdarray, VDataFrame]'):
         """
         Predict anomalies using federated model
         
@@ -218,7 +218,7 @@ class FLIsolationForest:
                 logging.warning("[FL] Using non-secure aggregation (HEU not provided)")
                 return self._simple_aggregate_predictions(predictions_list)
     
-    def score_samples(self, x: Union[FedNdarray, VDataFrame]):
+    def score_samples(self, x: 'Union[FedNdarray, VDataFrame]'):
         """
         Compute anomaly scores for samples
         
@@ -317,7 +317,7 @@ class FLIsolationForest:
         # Majority vote: sign of sum
         return np.sign(np.sum(votes, axis=0))
     
-    def decision_function(self, x: Union[FedNdarray, VDataFrame]):
+    def decision_function(self, x: 'Union[FedNdarray, VDataFrame]'):
         """
         Compute decision function (opposite of score_samples for compatibility)
         

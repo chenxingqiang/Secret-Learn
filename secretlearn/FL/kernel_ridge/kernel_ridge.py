@@ -32,7 +32,7 @@ except ImportError:
 class FLKernelRidge:
     """Federated Learning KernelRidge"""
     
-    def __init__(self, devices: Dict[str, PYU], heu: Optional[HEU] = None, **kwargs):
+    def __init__(self, devices: Dict[str, 'PYU'], heu: Optional['HEU'] = None, **kwargs):
         if not SECRETFLOW_AVAILABLE:
             raise RuntimeError("SecretFlow not installed")
         self.devices = devices
@@ -44,7 +44,7 @@ class FLKernelRidge:
         if USING_XLEARN:
             logging.info(f"[FL] FLKernelRidge with JAX acceleration")
     
-    def fit(self, x: Union[FedNdarray, VDataFrame], y: Union[FedNdarray, VDataFrame] = None):
+    def fit(self, x: 'Union[FedNdarray, VDataFrame]', y: 'Union[FedNdarray, VDataFrame]' = None):
         """Fit federated model"""
         if isinstance(x, VDataFrame):
             x = x.values
@@ -67,7 +67,7 @@ class FLKernelRidge:
         self._is_fitted = True
         return self
     
-    def predict(self, x: Union[FedNdarray, VDataFrame]):
+    def predict(self, x: 'Union[FedNdarray, VDataFrame]'):
         """Predict using federated model"""
         if not self._is_fitted:
             raise RuntimeError("Model must be fitted before prediction")
@@ -89,7 +89,7 @@ class FLKernelRidge:
             return aggregator.average(predictions_list)
         return np.mean(predictions_list, axis=0)
     
-    def transform(self, x: Union[FedNdarray, VDataFrame]):
+    def transform(self, x: 'Union[FedNdarray, VDataFrame]'):
         """Transform (if supported)"""
         if not self._is_fitted:
             raise RuntimeError("Model must be fitted before transformation")

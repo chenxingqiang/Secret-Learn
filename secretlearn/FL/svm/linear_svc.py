@@ -78,8 +78,8 @@ class FLLinearSVC:
     
     def __init__(
         self,
-        devices: Dict[str, PYU],
-        heu: Optional[HEU] = None,
+        devices: Dict[str, 'PYU'],
+        heu: Optional['HEU'] = None,
         aggregation_method: str = 'mean',
         **kwargs
     ):
@@ -115,8 +115,8 @@ class FLLinearSVC:
     
     def fit(
         self,
-        x: Union[FedNdarray, VDataFrame],
-        y: Union[FedNdarray, VDataFrame]
+        x: 'Union[FedNdarray, VDataFrame]',
+        y: 'Union[FedNdarray, VDataFrame]'
     ):
         """
         Fit the federated LinearSVC model
@@ -177,7 +177,7 @@ class FLLinearSVC:
         logging.info("[FL] Federated LinearSVC training completed")
         return self
     
-    def predict(self, x: Union[FedNdarray, VDataFrame]):
+    def predict(self, x: 'Union[FedNdarray, VDataFrame]'):
         """
         Predict using federated model
         
@@ -241,7 +241,7 @@ class FLLinearSVC:
         mode_result = stats.mode(predictions, axis=0)
         return mode_result.mode
     
-    def score(self, x: Union[FedNdarray, VDataFrame], y: Union[FedNdarray, VDataFrame]):
+    def score(self, x: 'Union[FedNdarray, VDataFrame]', y: 'Union[FedNdarray, VDataFrame]'):
         """
         Compute model accuracy score
         

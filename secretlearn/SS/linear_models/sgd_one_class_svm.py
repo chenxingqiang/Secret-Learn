@@ -32,7 +32,7 @@ except ImportError:
 class SSSGDOneClassSVM:
     """Secret Sharing SGDOneClassSVM (Supervised, Iterative)"""
     
-    def __init__(self, spu: SPU, **kwargs):
+    def __init__(self, spu: 'SPU', **kwargs):
         if not SECRETFLOW_AVAILABLE:
             raise RuntimeError("SecretFlow not installed")
         self.spu = spu
@@ -43,7 +43,7 @@ class SSSGDOneClassSVM:
         if USING_XLEARN:
             logging.info(f"[SS] SSSGDOneClassSVM with JAX acceleration")
     
-    def fit(self, x: Union[FedNdarray, VDataFrame], y: Union[FedNdarray, VDataFrame], epochs: int = 10):
+    def fit(self, x: 'Union[FedNdarray, VDataFrame]', y: 'Union[FedNdarray, VDataFrame]', epochs: int = 10):
         """Fit (supervised, iterative training in SPU)"""
         if isinstance(x, VDataFrame):
             x = x.values
@@ -72,7 +72,7 @@ class SSSGDOneClassSVM:
         self._is_fitted = True
         return self
     
-    def predict(self, x: Union[FedNdarray, VDataFrame]):
+    def predict(self, x: 'Union[FedNdarray, VDataFrame]'):
         """Predict using model in SPU"""
         if not self._is_fitted:
             raise RuntimeError("Model not fitted")

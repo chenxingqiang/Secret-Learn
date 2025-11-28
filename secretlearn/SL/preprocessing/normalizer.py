@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: BSD-3-Clause
 
 """
-Federated Learning adapter for Normalizer
+Split Learning adapter for Normalizer
 
 Normalizer is an UNSUPERVISED preprocessing algorithm.
 Model split across parties with collaborative training.
@@ -37,7 +37,7 @@ except ImportError:
 
 class SLNormalizer:
     """
-    Federated Learning Normalizer
+    Split Learning Normalizer
     
     Normalizer is an unsupervised preprocessing algorithm.
     
@@ -82,8 +82,8 @@ class SLNormalizer:
     
     def __init__(
         self,
-        devices: Dict[str, PYU],
-        heu: Optional[HEU] = None,
+        devices: Dict[str, 'PYU'],
+        heu: Optional['HEU'] = None,
         aggregation_method: str = 'mean',
         **kwargs
     ):
@@ -117,7 +117,7 @@ class SLNormalizer:
         """Create local Normalizer instance"""
         return Normalizer(**kwargs)
     
-    def fit(self, x: Union[FedNdarray, VDataFrame]):
+    def fit(self, x: 'Union[FedNdarray, VDataFrame]'):
         """
         Fit the federated Normalizer
         
@@ -162,7 +162,7 @@ class SLNormalizer:
         logging.info("[SL] Federated Normalizer fitting completed")
         return self
     
-    def transform(self, x: Union[FedNdarray, VDataFrame]):
+    def transform(self, x: 'Union[FedNdarray, VDataFrame]'):
         """
         Transform data using federated preprocessor
         
@@ -202,7 +202,7 @@ class SLNormalizer:
             # Each party's data is independently transformed
             return transformed_list
     
-    def fit_transform(self, x: Union[FedNdarray, VDataFrame]):
+    def fit_transform(self, x: 'Union[FedNdarray, VDataFrame]'):
         """
         Fit the preprocessor and transform data
         
@@ -219,7 +219,7 @@ class SLNormalizer:
         self.fit(x)
         return self.transform(x)
     
-    def inverse_transform(self, x: Union[FedNdarray, VDataFrame]):
+    def inverse_transform(self, x: 'Union[FedNdarray, VDataFrame]'):
         """
         Inverse transform data (if supported by the algorithm)
         

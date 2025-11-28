@@ -32,7 +32,7 @@ except ImportError:
 class SSVarianceThreshold:
     """Secret Sharing VarianceThreshold (Unsupervised)"""
     
-    def __init__(self, spu: SPU, **kwargs):
+    def __init__(self, spu: 'SPU', **kwargs):
         if not SECRETFLOW_AVAILABLE:
             raise RuntimeError("SecretFlow not installed")
         
@@ -44,7 +44,7 @@ class SSVarianceThreshold:
         if USING_XLEARN:
             logging.info(f"[SS] SSVarianceThreshold with JAX acceleration")
     
-    def fit(self, x: Union[FedNdarray, VDataFrame]):
+    def fit(self, x: 'Union[FedNdarray, VDataFrame]'):
         """Fit (unsupervised - no y needed)"""
         if isinstance(x, VDataFrame):
             x = x.values
@@ -61,7 +61,7 @@ class SSVarianceThreshold:
         self._is_fitted = True
         return self
     
-    def predict(self, x: Union[FedNdarray, VDataFrame]):
+    def predict(self, x: 'Union[FedNdarray, VDataFrame]'):
         """Predict cluster labels or anomalies"""
         if not self._is_fitted:
             raise RuntimeError("Model not fitted")
@@ -72,7 +72,7 @@ class SSVarianceThreshold:
         X_spu = x.to(self.spu)
         return self.spu(lambda m, X: m.predict(X))(self.model, X_spu)
     
-    def transform(self, x: Union[FedNdarray, VDataFrame]):
+    def transform(self, x: 'Union[FedNdarray, VDataFrame]'):
         """Transform data (if supported)"""
         if not self._is_fitted:
             raise RuntimeError("Model not fitted")

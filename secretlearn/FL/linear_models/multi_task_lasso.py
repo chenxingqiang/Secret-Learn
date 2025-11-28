@@ -35,7 +35,7 @@ except ImportError:
 class FLMultiTaskLasso:
     """Federated Learning MultiTaskLasso (Supervised, Non-iterative)"""
     
-    def __init__(self, devices: Dict[str, PYU], heu: Optional[HEU] = None, **kwargs):
+    def __init__(self, devices: Dict[str, 'PYU'], heu: Optional['HEU'] = None, **kwargs):
         if not SECRETFLOW_AVAILABLE:
             raise RuntimeError("SecretFlow not installed")
         
@@ -51,7 +51,7 @@ class FLMultiTaskLasso:
         if USING_XLEARN:
             logging.info("[FL] FLMultiTaskLasso with JAX acceleration")
     
-    def fit(self, x: Union[FedNdarray, VDataFrame], y: Union[FedNdarray, VDataFrame]):
+    def fit(self, x: 'Union[FedNdarray, VDataFrame]', y: 'Union[FedNdarray, VDataFrame]'):
         """Fit (supervised, single-pass training)"""
         if isinstance(x, VDataFrame):
             x = x.values
@@ -71,7 +71,7 @@ class FLMultiTaskLasso:
         self._is_fitted = True
         return self
     
-    def predict(self, x: Union[FedNdarray, VDataFrame]):
+    def predict(self, x: 'Union[FedNdarray, VDataFrame]'):
         """Predict using federated model"""
         if not self._is_fitted:
             raise RuntimeError("Model not fitted")

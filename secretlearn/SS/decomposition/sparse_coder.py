@@ -32,7 +32,7 @@ except ImportError:
 class SSSparseCoder:
     """Secret Sharing SparseCoder (Supervised, Non-iterative)"""
     
-    def __init__(self, spu: SPU, **kwargs):
+    def __init__(self, spu: 'SPU', **kwargs):
         if not SECRETFLOW_AVAILABLE:
             raise RuntimeError("SecretFlow not installed")
         self.spu = spu
@@ -43,7 +43,7 @@ class SSSparseCoder:
         if USING_XLEARN:
             logging.info(f"[SS] SSSparseCoder with JAX acceleration")
     
-    def fit(self, x: Union[FedNdarray, VDataFrame], y: Union[FedNdarray, VDataFrame]):
+    def fit(self, x: 'Union[FedNdarray, VDataFrame]', y: 'Union[FedNdarray, VDataFrame]'):
         """Fit (supervised, single-pass training in SPU)"""
         if isinstance(x, VDataFrame):
             x = x.values
@@ -63,7 +63,7 @@ class SSSparseCoder:
         self._is_fitted = True
         return self
     
-    def predict(self, x: Union[FedNdarray, VDataFrame]):
+    def predict(self, x: 'Union[FedNdarray, VDataFrame]'):
         """Predict using model in SPU"""
         if not self._is_fitted:
             raise RuntimeError("Model not fitted")

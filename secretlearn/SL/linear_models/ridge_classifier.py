@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: BSD-3-Clause
 
 """
-Federated Learning adapter for RidgeClassifier
+Split Learning adapter for RidgeClassifier
 
 RidgeClassifier is a SUPERVISED regression/classification algorithm.
 Model split across parties with collaborative training.
@@ -35,9 +35,9 @@ except ImportError:
     SECRETFLOW_AVAILABLE = False
 
 
-class FLRidgeClassifier:
+class SLRidgeClassifier:
     """
-    Federated Learning RidgeClassifier
+    Split Learning RidgeClassifier
     
     RidgeClassifier is a supervised regression/classification algorithm.
     
@@ -78,8 +78,8 @@ class FLRidgeClassifier:
     
     def __init__(
         self,
-        devices: Dict[str, PYU],
-        heu: Optional[HEU] = None,
+        devices: Dict[str, 'PYU'],
+        heu: Optional['HEU'] = None,
         aggregation_method: str = 'mean',
         **kwargs
     ):
@@ -100,9 +100,9 @@ class FLRidgeClassifier:
         self._is_fitted = False
         
         if USING_XLEARN:
-            logging.info("[SL] FLRidgeClassifier initialized with JAX acceleration")
+            logging.info("[SL] SLRidgeClassifier initialized with JAX acceleration")
         else:
-            logging.info("[SL] FLRidgeClassifier initialized with sklearn")
+            logging.info("[SL] SLRidgeClassifier initialized with sklearn")
         
         logging.info(f"[SL] Parties: {list(devices.keys())}")
         logging.info(f"[SL] Aggregation: {aggregation_method}")
@@ -115,8 +115,8 @@ class FLRidgeClassifier:
     
     def fit(
         self,
-        x: Union[FedNdarray, VDataFrame],
-        y: Union[FedNdarray, VDataFrame]
+        x: 'Union[FedNdarray, VDataFrame]',
+        y: 'Union[FedNdarray, VDataFrame]'
     ):
         """
         Fit the federated RidgeClassifier model
@@ -177,7 +177,7 @@ class FLRidgeClassifier:
         logging.info("[SL] Federated RidgeClassifier training completed")
         return self
     
-    def predict(self, x: Union[FedNdarray, VDataFrame]):
+    def predict(self, x: 'Union[FedNdarray, VDataFrame]'):
         """
         Predict using federated model
         
@@ -236,7 +236,7 @@ class FLRidgeClassifier:
         """Simple aggregation - for development only"""
         return np.mean(predictions_list, axis=0)
     
-    def score(self, x: Union[FedNdarray, VDataFrame], y: Union[FedNdarray, VDataFrame]):
+    def score(self, x: 'Union[FedNdarray, VDataFrame]', y: 'Union[FedNdarray, VDataFrame]'):
         """
         Compute model score
         

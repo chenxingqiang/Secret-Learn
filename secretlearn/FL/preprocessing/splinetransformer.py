@@ -82,8 +82,8 @@ class FLSplineTransformer:
     
     def __init__(
         self,
-        devices: Dict[str, PYU],
-        heu: Optional[HEU] = None,
+        devices: Dict[str, 'PYU'],
+        heu: Optional['HEU'] = None,
         aggregation_method: str = 'mean',
         **kwargs
     ):
@@ -117,7 +117,7 @@ class FLSplineTransformer:
         """Create local SplineTransformer instance"""
         return SplineTransformer(**kwargs)
     
-    def fit(self, x: Union[FedNdarray, VDataFrame]):
+    def fit(self, x: 'Union[FedNdarray, VDataFrame]'):
         """
         Fit the federated SplineTransformer
         
@@ -162,7 +162,7 @@ class FLSplineTransformer:
         logging.info("[FL] Federated SplineTransformer fitting completed")
         return self
     
-    def transform(self, x: Union[FedNdarray, VDataFrame]):
+    def transform(self, x: 'Union[FedNdarray, VDataFrame]'):
         """
         Transform data using federated preprocessor
         
@@ -202,7 +202,7 @@ class FLSplineTransformer:
             # Each party's data is independently transformed
             return transformed_list
     
-    def fit_transform(self, x: Union[FedNdarray, VDataFrame]):
+    def fit_transform(self, x: 'Union[FedNdarray, VDataFrame]'):
         """
         Fit the preprocessor and transform data
         
@@ -219,7 +219,7 @@ class FLSplineTransformer:
         self.fit(x)
         return self.transform(x)
     
-    def inverse_transform(self, x: Union[FedNdarray, VDataFrame]):
+    def inverse_transform(self, x: 'Union[FedNdarray, VDataFrame]'):
         """
         Inverse transform data (if supported by the algorithm)
         

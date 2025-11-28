@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: BSD-3-Clause
 
 """
-Federated Learning adapter for Birch
+Split Learning adapter for Birch
 
 Birch is an UNSUPERVISED clustering algorithm.
 Model split across parties with collaborative training.
@@ -37,7 +37,7 @@ except ImportError:
 
 class SLBirch:
     """
-    Federated Learning Birch
+    Split Learning Birch
     
     Birch is an unsupervised clustering algorithm.
     
@@ -79,8 +79,8 @@ class SLBirch:
     
     def __init__(
         self,
-        devices: Dict[str, PYU],
-        heu: Optional[HEU] = None,
+        devices: Dict[str, 'PYU'],
+        heu: Optional['HEU'] = None,
         aggregation_method: str = 'mean',
         **kwargs
     ):
@@ -114,7 +114,7 @@ class SLBirch:
         """Create local Birch instance"""
         return Birch(**kwargs)
     
-    def fit(self, x: Union[FedNdarray, VDataFrame]):
+    def fit(self, x: 'Union[FedNdarray, VDataFrame]'):
         """
         Fit the federated Birch model
         
@@ -160,7 +160,7 @@ class SLBirch:
         logging.info("[SL] Federated Birch clustering completed")
         return self
     
-    def predict(self, x: Union[FedNdarray, VDataFrame]):
+    def predict(self, x: 'Union[FedNdarray, VDataFrame]'):
         """
         Predict cluster assignments using federated model
         
@@ -202,7 +202,7 @@ class SLBirch:
                 logging.warning("[SL] Using non-secure aggregation (HEU not provided)")
                 return self._simple_aggregate_labels(predictions_list)
     
-    def fit_predict(self, x: Union[FedNdarray, VDataFrame]):
+    def fit_predict(self, x: 'Union[FedNdarray, VDataFrame]'):
         """
         Fit the model and predict cluster assignments
         

@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: BSD-3-Clause
 
 """
-Federated Learning adapter for MinMaxScaler
+Split Learning adapter for MinMaxScaler
 
 MinMaxScaler is an UNSUPERVISED preprocessing algorithm.
 Model split across parties with collaborative training.
@@ -35,9 +35,9 @@ except ImportError:
     SECRETFLOW_AVAILABLE = False
 
 
-class FLMinMaxScaler:
+class SLMinMaxScaler:
     """
-    Federated Learning MinMaxScaler
+    Split Learning MinMaxScaler
     
     MinMaxScaler is an unsupervised preprocessing algorithm.
     
@@ -82,8 +82,8 @@ class FLMinMaxScaler:
     
     def __init__(
         self,
-        devices: Dict[str, PYU],
-        heu: Optional[HEU] = None,
+        devices: Dict[str, 'PYU'],
+        heu: Optional['HEU'] = None,
         aggregation_method: str = 'mean',
         **kwargs
     ):
@@ -104,9 +104,9 @@ class FLMinMaxScaler:
         self._is_fitted = False
         
         if USING_XLEARN:
-            logging.info("[SL] FLMinMaxScaler initialized with JAX acceleration")
+            logging.info("[SL] SLMinMaxScaler initialized with JAX acceleration")
         else:
-            logging.info("[SL] FLMinMaxScaler initialized with sklearn")
+            logging.info("[SL] SLMinMaxScaler initialized with sklearn")
         
         logging.info(f"[SL] Parties: {list(devices.keys())}")
         logging.info(f"[SL] Aggregation: {aggregation_method}")
@@ -117,7 +117,7 @@ class FLMinMaxScaler:
         """Create local MinMaxScaler instance"""
         return MinMaxScaler(**kwargs)
     
-    def fit(self, x: Union[FedNdarray, VDataFrame]):
+    def fit(self, x: 'Union[FedNdarray, VDataFrame]'):
         """
         Fit the federated MinMaxScaler
         
@@ -162,7 +162,7 @@ class FLMinMaxScaler:
         logging.info("[SL] Federated MinMaxScaler fitting completed")
         return self
     
-    def transform(self, x: Union[FedNdarray, VDataFrame]):
+    def transform(self, x: 'Union[FedNdarray, VDataFrame]'):
         """
         Transform data using federated preprocessor
         
@@ -202,7 +202,7 @@ class FLMinMaxScaler:
             # Each party's data is independently transformed
             return transformed_list
     
-    def fit_transform(self, x: Union[FedNdarray, VDataFrame]):
+    def fit_transform(self, x: 'Union[FedNdarray, VDataFrame]'):
         """
         Fit the preprocessor and transform data
         
@@ -219,7 +219,7 @@ class FLMinMaxScaler:
         self.fit(x)
         return self.transform(x)
     
-    def inverse_transform(self, x: Union[FedNdarray, VDataFrame]):
+    def inverse_transform(self, x: 'Union[FedNdarray, VDataFrame]'):
         """
         Inverse transform data (if supported by the algorithm)
         

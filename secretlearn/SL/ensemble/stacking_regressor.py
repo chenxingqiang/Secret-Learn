@@ -43,7 +43,7 @@ class SLStackingRegressor:
         if USING_XLEARN:
             logging.info(f"[SL] SLStackingRegressor with JAX acceleration")
     
-    def fit(self, x: Union[FedNdarray, VDataFrame], y: Union[FedNdarray, VDataFrame]):
+    def fit(self, x: 'Union[FedNdarray, VDataFrame]', y: 'Union[FedNdarray, VDataFrame]'):
         """Fit (supervised, single-pass training in PYU)"""
         if isinstance(x, VDataFrame):
             x = x.values
@@ -63,7 +63,7 @@ class SLStackingRegressor:
         self._is_fitted = True
         return self
     
-    def predict(self, x: Union[FedNdarray, VDataFrame]):
+    def predict(self, x: 'Union[FedNdarray, VDataFrame]'):
         """Predict using model in PYU"""
         if not self._is_fitted:
             raise RuntimeError("Model not fitted")

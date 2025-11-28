@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: BSD-3-Clause
 
 """
-Federated Learning adapter for Binarizer
+Split Learning adapter for Binarizer
 
 Binarizer is an UNSUPERVISED preprocessing algorithm.
 Model split across parties with collaborative training.
@@ -37,7 +37,7 @@ except ImportError:
 
 class SLBinarizer:
     """
-    Federated Learning Binarizer
+    Split Learning Binarizer
     
     Binarizer is an unsupervised preprocessing algorithm.
     
@@ -82,8 +82,8 @@ class SLBinarizer:
     
     def __init__(
         self,
-        devices: Dict[str, PYU],
-        heu: Optional[HEU] = None,
+        devices: Dict[str, 'PYU'],
+        heu: Optional['HEU'] = None,
         aggregation_method: str = 'mean',
         **kwargs
     ):
@@ -117,7 +117,7 @@ class SLBinarizer:
         """Create local Binarizer instance"""
         return Binarizer(**kwargs)
     
-    def fit(self, x: Union[FedNdarray, VDataFrame]):
+    def fit(self, x: 'Union[FedNdarray, VDataFrame]'):
         """
         Fit the federated Binarizer
         
@@ -162,7 +162,7 @@ class SLBinarizer:
         logging.info("[SL] Federated Binarizer fitting completed")
         return self
     
-    def transform(self, x: Union[FedNdarray, VDataFrame]):
+    def transform(self, x: 'Union[FedNdarray, VDataFrame]'):
         """
         Transform data using federated preprocessor
         
@@ -202,7 +202,7 @@ class SLBinarizer:
             # Each party's data is independently transformed
             return transformed_list
     
-    def fit_transform(self, x: Union[FedNdarray, VDataFrame]):
+    def fit_transform(self, x: 'Union[FedNdarray, VDataFrame]'):
         """
         Fit the preprocessor and transform data
         
@@ -219,7 +219,7 @@ class SLBinarizer:
         self.fit(x)
         return self.transform(x)
     
-    def inverse_transform(self, x: Union[FedNdarray, VDataFrame]):
+    def inverse_transform(self, x: 'Union[FedNdarray, VDataFrame]'):
         """
         Inverse transform data (if supported by the algorithm)
         

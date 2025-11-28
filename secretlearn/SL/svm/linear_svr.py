@@ -78,8 +78,8 @@ class SLLinearSVR:
     
     def __init__(
         self,
-        devices: Dict[str, PYU],
-        heu: Optional[HEU] = None,
+        devices: Dict[str, 'PYU'],
+        heu: Optional['HEU'] = None,
         aggregation_method: str = 'mean',
         **kwargs
     ):
@@ -115,8 +115,8 @@ class SLLinearSVR:
     
     def fit(
         self,
-        x: Union[FedNdarray, VDataFrame],
-        y: Union[FedNdarray, VDataFrame]
+        x: 'Union[FedNdarray, VDataFrame]',
+        y: 'Union[FedNdarray, VDataFrame]'
     ):
         """
         Fit the split learning LinearSVR model
@@ -177,7 +177,7 @@ class SLLinearSVR:
         logging.info("[SL] Split learning LinearSVR training completed")
         return self
     
-    def predict(self, x: Union[FedNdarray, VDataFrame]):
+    def predict(self, x: 'Union[FedNdarray, VDataFrame]'):
         """
         Predict using split learning model
         
@@ -237,7 +237,7 @@ class SLLinearSVR:
         """Simple aggregation - for development only"""
         return np.mean(predictions_list, axis=0)
     
-    def score(self, x: Union[FedNdarray, VDataFrame], y: Union[FedNdarray, VDataFrame]):
+    def score(self, x: 'Union[FedNdarray, VDataFrame]', y: 'Union[FedNdarray, VDataFrame]'):
         """
         Compute model score
         

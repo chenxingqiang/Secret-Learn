@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: BSD-3-Clause
 
 """
-Federated Learning adapter for Ridge
+Split Learning adapter for Ridge
 
 Ridge is a SUPERVISED regression/classification algorithm.
 Model split across parties with collaborative training.
@@ -37,7 +37,7 @@ except ImportError:
 
 class SLRidge:
     """
-    Federated Learning Ridge
+    Split Learning Ridge
     
     Ridge is a supervised regression/classification algorithm.
     
@@ -78,8 +78,8 @@ class SLRidge:
     
     def __init__(
         self,
-        devices: Dict[str, PYU],
-        heu: Optional[HEU] = None,
+        devices: Dict[str, 'PYU'],
+        heu: Optional['HEU'] = None,
         aggregation_method: str = 'mean',
         **kwargs
     ):
@@ -115,8 +115,8 @@ class SLRidge:
     
     def fit(
         self,
-        x: Union[FedNdarray, VDataFrame],
-        y: Union[FedNdarray, VDataFrame]
+        x: 'Union[FedNdarray, VDataFrame]',
+        y: 'Union[FedNdarray, VDataFrame]'
     ):
         """
         Fit the federated Ridge model
@@ -177,7 +177,7 @@ class SLRidge:
         logging.info("[SL] Federated Ridge training completed")
         return self
     
-    def predict(self, x: Union[FedNdarray, VDataFrame]):
+    def predict(self, x: 'Union[FedNdarray, VDataFrame]'):
         """
         Predict using federated model
         
@@ -236,7 +236,7 @@ class SLRidge:
         """Simple aggregation - for development only"""
         return np.mean(predictions_list, axis=0)
     
-    def score(self, x: Union[FedNdarray, VDataFrame], y: Union[FedNdarray, VDataFrame]):
+    def score(self, x: 'Union[FedNdarray, VDataFrame]', y: 'Union[FedNdarray, VDataFrame]'):
         """
         Compute model score
         

@@ -69,8 +69,8 @@ class FLPassiveAggressiveClassifier:
     
     def __init__(
         self,
-        devices: Dict[str, PYU],
-        heu: Optional[HEU] = None,
+        devices: Dict[str, 'PYU'],
+        heu: Optional['HEU'] = None,
         **kwargs
     ):
         if not SECRETFLOW_AVAILABLE:
@@ -97,8 +97,8 @@ class FLPassiveAggressiveClassifier:
     
     def fit(
         self,
-        x: Union[FedNdarray, VDataFrame],
-        y: Union[FedNdarray, VDataFrame],
+        x: 'Union[FedNdarray, VDataFrame]',
+        y: 'Union[FedNdarray, VDataFrame]',
         epochs: int = 10
     ):
         """
@@ -158,8 +158,8 @@ class FLPassiveAggressiveClassifier:
     
     def partial_fit(
         self,
-        x: Union[FedNdarray, VDataFrame],
-        y: Union[FedNdarray, VDataFrame],
+        x: 'Union[FedNdarray, VDataFrame]',
+        y: 'Union[FedNdarray, VDataFrame]',
         classes=None
     ):
         """
@@ -201,7 +201,7 @@ class FLPassiveAggressiveClassifier:
         self._is_fitted = True
         return self
     
-    def predict(self, x: Union[FedNdarray, VDataFrame]):
+    def predict(self, x: 'Union[FedNdarray, VDataFrame]'):
         """Predict using federated model"""
         if not self._is_fitted:
             raise RuntimeError("Model must be fitted before prediction")

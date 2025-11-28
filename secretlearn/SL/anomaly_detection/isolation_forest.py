@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: BSD-3-Clause
 
 """
-Federated Learning adapter for IsolationForest
+Split Learning adapter for IsolationForest
 
 IsolationForest is an UNSUPERVISED anomaly detection algorithm.
 Model split across parties with collaborative training.
@@ -35,9 +35,9 @@ except ImportError:
     SECRETFLOW_AVAILABLE = False
 
 
-class FLIsolationForest:
+class SLIsolationForest:
     """
-    Federated Learning IsolationForest
+    Split Learning IsolationForest
     
     IsolationForest is an unsupervised anomaly detection algorithm that
     isolates anomalies by randomly selecting features and split values.
@@ -87,8 +87,8 @@ class FLIsolationForest:
     
     def __init__(
         self,
-        devices: Dict[str, PYU],
-        heu: Optional[HEU] = None,
+        devices: Dict[str, 'PYU'],
+        heu: Optional['HEU'] = None,
         aggregation_method: str = 'mean',
         **kwargs
     ):
@@ -109,9 +109,9 @@ class FLIsolationForest:
         self._is_fitted = False
         
         if USING_XLEARN:
-            logging.info("[SL] FLIsolationForest initialized with JAX acceleration")
+            logging.info("[SL] SLIsolationForest initialized with JAX acceleration")
         else:
-            logging.info("[SL] FLIsolationForest initialized with sklearn")
+            logging.info("[SL] SLIsolationForest initialized with sklearn")
         
         logging.info(f"[SL] Parties: {list(devices.keys())}")
         logging.info(f"[SL] Aggregation: {aggregation_method}")
@@ -122,7 +122,7 @@ class FLIsolationForest:
         """Create local IsolationForest instance"""
         return IsolationForest(**kwargs)
     
-    def fit(self, x: Union[FedNdarray, VDataFrame]):
+    def fit(self, x: 'Union[FedNdarray, VDataFrame]'):
         """
         Fit the federated IsolationForest model
         
@@ -167,7 +167,7 @@ class FLIsolationForest:
         logging.info("[SL] Federated IsolationForest training completed")
         return self
     
-    def predict(self, x: Union[FedNdarray, VDataFrame]):
+    def predict(self, x: 'Union[FedNdarray, VDataFrame]'):
         """
         Predict anomalies using federated model
         
@@ -218,7 +218,7 @@ class FLIsolationForest:
                 logging.warning("[SL] Using non-secure aggregation (HEU not provided)")
                 return self._simple_aggregate_predictions(predictions_list)
     
-    def score_samples(self, x: Union[FedNdarray, VDataFrame]):
+    def score_samples(self, x: 'Union[FedNdarray, VDataFrame]'):
         """
         Compute anomaly scores for samples
         
@@ -317,7 +317,7 @@ class FLIsolationForest:
         # Majority vote: sign of sum
         return np.sign(np.sum(votes, axis=0))
     
-    def decision_function(self, x: Union[FedNdarray, VDataFrame]):
+    def decision_function(self, x: 'Union[FedNdarray, VDataFrame]'):
         """
         Compute decision function (opposite of score_samples for compatibility)
         

@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: BSD-3-Clause
 
 """
-Federated Learning adapter for Isomap
+Split Learning adapter for Isomap
 
 Isomap is an UNSUPERVISED manifold learning algorithm.
 Model split across parties with collaborative training.
@@ -37,7 +37,7 @@ except ImportError:
 
 class SLIsomap:
     """
-    Federated Learning Isomap
+    Split Learning Isomap
     
     Isomap is an unsupervised manifold learning algorithm.
     
@@ -79,8 +79,8 @@ class SLIsomap:
     
     def __init__(
         self,
-        devices: Dict[str, PYU],
-        heu: Optional[HEU] = None,
+        devices: Dict[str, 'PYU'],
+        heu: Optional['HEU'] = None,
         aggregation_method: str = 'mean',
         **kwargs
     ):
@@ -114,7 +114,7 @@ class SLIsomap:
         """Create local Isomap instance"""
         return Isomap(**kwargs)
     
-    def fit(self, x: Union[FedNdarray, VDataFrame]):
+    def fit(self, x: 'Union[FedNdarray, VDataFrame]'):
         """
         Fit the federated Isomap model
         
@@ -160,7 +160,7 @@ class SLIsomap:
         logging.info("[SL] Federated Isomap manifold learning completed")
         return self
     
-    def transform(self, x: Union[FedNdarray, VDataFrame]):
+    def transform(self, x: 'Union[FedNdarray, VDataFrame]'):
         """
         Transform data using federated model
         
@@ -202,7 +202,7 @@ class SLIsomap:
                 logging.warning("[SL] Using non-secure aggregation (HEU not provided)")
                 return self._simple_aggregate_transform(transformed_list)
     
-    def fit_transform(self, x: Union[FedNdarray, VDataFrame]):
+    def fit_transform(self, x: 'Union[FedNdarray, VDataFrame]'):
         """
         Fit the model and transform data
         
@@ -219,7 +219,7 @@ class SLIsomap:
         self.fit(x)
         return self.transform(x)
     
-    def inverse_transform(self, x: Union[FedNdarray, VDataFrame]):
+    def inverse_transform(self, x: 'Union[FedNdarray, VDataFrame]'):
         """
         Inverse transform data (if supported by the algorithm)
         

@@ -79,8 +79,8 @@ class FLMinCovDet:
     
     def __init__(
         self,
-        devices: Dict[str, PYU],
-        heu: Optional[HEU] = None,
+        devices: Dict[str, 'PYU'],
+        heu: Optional['HEU'] = None,
         aggregation_method: str = 'mean',
         **kwargs
     ):
@@ -114,7 +114,7 @@ class FLMinCovDet:
         """Create local MinCovDet instance"""
         return MinCovDet(**kwargs)
     
-    def fit(self, x: Union[FedNdarray, VDataFrame]):
+    def fit(self, x: 'Union[FedNdarray, VDataFrame]'):
         """
         Fit the federated MinCovDet model
         
@@ -160,7 +160,7 @@ class FLMinCovDet:
         logging.info("[FL] Federated MinCovDet covariance estimation completed")
         return self
     
-    def transform(self, x: Union[FedNdarray, VDataFrame]):
+    def transform(self, x: 'Union[FedNdarray, VDataFrame]'):
         """
         Transform data using federated model
         
@@ -202,7 +202,7 @@ class FLMinCovDet:
                 logging.warning("[FL] Using non-secure aggregation (HEU not provided)")
                 return self._simple_aggregate_transform(transformed_list)
     
-    def fit_transform(self, x: Union[FedNdarray, VDataFrame]):
+    def fit_transform(self, x: 'Union[FedNdarray, VDataFrame]'):
         """
         Fit the model and transform data
         
@@ -219,7 +219,7 @@ class FLMinCovDet:
         self.fit(x)
         return self.transform(x)
     
-    def inverse_transform(self, x: Union[FedNdarray, VDataFrame]):
+    def inverse_transform(self, x: 'Union[FedNdarray, VDataFrame]'):
         """
         Inverse transform data (if supported by the algorithm)
         

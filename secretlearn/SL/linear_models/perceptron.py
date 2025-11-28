@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: BSD-3-Clause
 
 """
-Federated Learning adapter for Perceptron
+Split Learning adapter for Perceptron
 
 Perceptron is an ITERATIVE SUPERVISED algorithm.
 Model split across parties with collaborative training.
@@ -37,7 +37,7 @@ except ImportError:
 
 class SLPerceptron:
     """
-    Federated Learning Perceptron
+    Split Learning Perceptron
     
     Perceptron is an iterative supervised algorithm that supports
     incremental learning via partial_fit.
@@ -69,8 +69,8 @@ class SLPerceptron:
     
     def __init__(
         self,
-        devices: Dict[str, PYU],
-        heu: Optional[HEU] = None,
+        devices: Dict[str, 'PYU'],
+        heu: Optional['HEU'] = None,
         **kwargs
     ):
         if not SECRETFLOW_AVAILABLE:
@@ -97,8 +97,8 @@ class SLPerceptron:
     
     def fit(
         self,
-        x: Union[FedNdarray, VDataFrame],
-        y: Union[FedNdarray, VDataFrame],
+        x: 'Union[FedNdarray, VDataFrame]',
+        y: 'Union[FedNdarray, VDataFrame]',
         epochs: int = 10
     ):
         """
@@ -158,8 +158,8 @@ class SLPerceptron:
     
     def partial_fit(
         self,
-        x: Union[FedNdarray, VDataFrame],
-        y: Union[FedNdarray, VDataFrame],
+        x: 'Union[FedNdarray, VDataFrame]',
+        y: 'Union[FedNdarray, VDataFrame]',
         classes=None
     ):
         """
@@ -201,7 +201,7 @@ class SLPerceptron:
         self._is_fitted = True
         return self
     
-    def predict(self, x: Union[FedNdarray, VDataFrame]):
+    def predict(self, x: 'Union[FedNdarray, VDataFrame]'):
         """Predict using federated model"""
         if not self._is_fitted:
             raise RuntimeError("Model must be fitted before prediction")

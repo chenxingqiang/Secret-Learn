@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: BSD-3-Clause
 
 """
-Federated Learning adapter for PassiveAggressiveClassifier
+Split Learning adapter for PassiveAggressiveClassifier
 
 PassiveAggressiveClassifier is an ITERATIVE SUPERVISED algorithm.
 Model split across parties with collaborative training.
@@ -35,9 +35,9 @@ except ImportError:
     SECRETFLOW_AVAILABLE = False
 
 
-class FLPassiveAggressiveClassifier:
+class SLPassiveAggressiveClassifier:
     """
-    Federated Learning PassiveAggressiveClassifier
+    Split Learning PassiveAggressiveClassifier
     
     PassiveAggressiveClassifier is an iterative supervised algorithm that supports
     incremental learning via partial_fit.
@@ -69,8 +69,8 @@ class FLPassiveAggressiveClassifier:
     
     def __init__(
         self,
-        devices: Dict[str, PYU],
-        heu: Optional[HEU] = None,
+        devices: Dict[str, 'PYU'],
+        heu: Optional['HEU'] = None,
         **kwargs
     ):
         if not SECRETFLOW_AVAILABLE:
@@ -87,9 +87,9 @@ class FLPassiveAggressiveClassifier:
         self._is_fitted = False
         
         if USING_XLEARN:
-            logging.info("[SL] FLPassiveAggressiveClassifier initialized with JAX acceleration")
+            logging.info("[SL] SLPassiveAggressiveClassifier initialized with JAX acceleration")
         else:
-            logging.info("[SL] FLPassiveAggressiveClassifier initialized with sklearn")
+            logging.info("[SL] SLPassiveAggressiveClassifier initialized with sklearn")
     
     @staticmethod
     def _create_local_model(**kwargs):
@@ -97,8 +97,8 @@ class FLPassiveAggressiveClassifier:
     
     def fit(
         self,
-        x: Union[FedNdarray, VDataFrame],
-        y: Union[FedNdarray, VDataFrame],
+        x: 'Union[FedNdarray, VDataFrame]',
+        y: 'Union[FedNdarray, VDataFrame]',
         epochs: int = 10
     ):
         """
@@ -158,8 +158,8 @@ class FLPassiveAggressiveClassifier:
     
     def partial_fit(
         self,
-        x: Union[FedNdarray, VDataFrame],
-        y: Union[FedNdarray, VDataFrame],
+        x: 'Union[FedNdarray, VDataFrame]',
+        y: 'Union[FedNdarray, VDataFrame]',
         classes=None
     ):
         """
@@ -201,7 +201,7 @@ class FLPassiveAggressiveClassifier:
         self._is_fitted = True
         return self
     
-    def predict(self, x: Union[FedNdarray, VDataFrame]):
+    def predict(self, x: 'Union[FedNdarray, VDataFrame]'):
         """Predict using federated model"""
         if not self._is_fitted:
             raise RuntimeError("Model must be fitted before prediction")

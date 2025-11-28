@@ -84,8 +84,8 @@ class FLVarianceThreshold:
     
     def __init__(
         self,
-        devices: Dict[str, PYU],
-        heu: Optional[HEU] = None,
+        devices: Dict[str, 'PYU'],
+        heu: Optional['HEU'] = None,
         aggregation_method: str = 'mean',
         **kwargs
     ):
@@ -119,7 +119,7 @@ class FLVarianceThreshold:
         """Create local VarianceThreshold instance"""
         return VarianceThreshold(**kwargs)
     
-    def fit(self, x: Union[FedNdarray, VDataFrame]):
+    def fit(self, x: 'Union[FedNdarray, VDataFrame]'):
         """
         Fit the federated VarianceThreshold
         
@@ -165,7 +165,7 @@ class FLVarianceThreshold:
         logging.info("[FL] Federated VarianceThreshold fitting completed")
         return self
     
-    def transform(self, x: Union[FedNdarray, VDataFrame]):
+    def transform(self, x: 'Union[FedNdarray, VDataFrame]'):
         """
         Select features based on variance threshold
         
@@ -203,7 +203,7 @@ class FLVarianceThreshold:
             # For feature selection, each party keeps their selected features
             return selected_list
     
-    def fit_transform(self, x: Union[FedNdarray, VDataFrame]):
+    def fit_transform(self, x: 'Union[FedNdarray, VDataFrame]'):
         """
         Fit and select features
         
@@ -220,7 +220,7 @@ class FLVarianceThreshold:
         self.fit(x)
         return self.transform(x)
     
-    def inverse_transform(self, x: Union[FedNdarray, VDataFrame]):
+    def inverse_transform(self, x: 'Union[FedNdarray, VDataFrame]'):
         """
         Inverse transform (restore removed features with zeros)
         

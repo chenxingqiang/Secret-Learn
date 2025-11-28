@@ -43,7 +43,7 @@ class SLIsolationForest:
         if USING_XLEARN:
             logging.info(f"[SL] SLIsolationForest with JAX acceleration")
     
-    def fit(self, x: Union[FedNdarray, VDataFrame]):
+    def fit(self, x: 'Union[FedNdarray, VDataFrame]'):
         """Fit (unsupervised - no y needed)"""
         if isinstance(x, VDataFrame):
             x = x.values
@@ -60,7 +60,7 @@ class SLIsolationForest:
         self._is_fitted = True
         return self
     
-    def transform(self, x: Union[FedNdarray, VDataFrame]):
+    def transform(self, x: 'Union[FedNdarray, VDataFrame]'):
         """Transform data"""
         if not self._is_fitted:
             raise RuntimeError("Model not fitted")
@@ -70,7 +70,7 @@ class SLIsolationForest:
         X_spu = x.to(self.spu)
         return self.spu(lambda m, X: m.transform(X))(self.model, X_spu)
     
-    def predict(self, x: Union[FedNdarray, VDataFrame]):
+    def predict(self, x: 'Union[FedNdarray, VDataFrame]'):
         """Predict (for clustering/anomaly detection)"""
         if not self._is_fitted:
             raise RuntimeError("Model not fitted")

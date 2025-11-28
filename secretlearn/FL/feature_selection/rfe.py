@@ -63,7 +63,7 @@ class FLRFE:
     >>> model.fit(fed_X, fed_y, epochs=10)
     """
     
-    def __init__(self, devices: Dict[str, PYU], heu: HEU = None, **kwargs):
+    def __init__(self, devices: Dict[str, 'PYU'], heu: HEU = None, **kwargs):
         if not SECRETFLOW_AVAILABLE:
             raise RuntimeError("SecretFlow not installed")
         
@@ -88,8 +88,8 @@ class FLRFE:
     
     def fit(
         self,
-        x: Union[FedNdarray, VDataFrame],
-        y: Union[FedNdarray, VDataFrame],
+        x: 'Union[FedNdarray, VDataFrame]',
+        y: 'Union[FedNdarray, VDataFrame]',
         epochs: int = 10,
         batch_size: int = 128,
     ):
@@ -153,7 +153,7 @@ class FLRFE:
         logging.info("[FL] Federated training completed")
         return self
     
-    def predict(self, x: Union[FedNdarray, VDataFrame]):
+    def predict(self, x: 'Union[FedNdarray, VDataFrame]'):
         """Predict using federated model"""
         # Each party computes local predictions, then aggregate
         if isinstance(x, VDataFrame):

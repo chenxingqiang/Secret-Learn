@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: BSD-3-Clause
 
 """
-Federated Learning adapter for DecisionTreeClassifier
+Split Learning adapter for DecisionTreeClassifier
 
 DecisionTreeClassifier is a SUPERVISED decision tree algorithm.
 Model split across parties with collaborative training.
@@ -35,9 +35,9 @@ except ImportError:
     SECRETFLOW_AVAILABLE = False
 
 
-class FLDecisionTreeClassifier:
+class SLDecisionTreeClassifier:
     """
-    Federated Learning DecisionTreeClassifier
+    Split Learning DecisionTreeClassifier
     
     DecisionTreeClassifier is a supervised decision tree algorithm.
     
@@ -78,8 +78,8 @@ class FLDecisionTreeClassifier:
     
     def __init__(
         self,
-        devices: Dict[str, PYU],
-        heu: Optional[HEU] = None,
+        devices: Dict[str, 'PYU'],
+        heu: Optional['HEU'] = None,
         aggregation_method: str = 'mean',
         **kwargs
     ):
@@ -100,9 +100,9 @@ class FLDecisionTreeClassifier:
         self._is_fitted = False
         
         if USING_XLEARN:
-            logging.info("[SL] FLDecisionTreeClassifier initialized with JAX acceleration")
+            logging.info("[SL] SLDecisionTreeClassifier initialized with JAX acceleration")
         else:
-            logging.info("[SL] FLDecisionTreeClassifier initialized with sklearn")
+            logging.info("[SL] SLDecisionTreeClassifier initialized with sklearn")
         
         logging.info(f"[SL] Parties: {list(devices.keys())}")
         logging.info(f"[SL] Aggregation: {aggregation_method}")
@@ -115,8 +115,8 @@ class FLDecisionTreeClassifier:
     
     def fit(
         self,
-        x: Union[FedNdarray, VDataFrame],
-        y: Union[FedNdarray, VDataFrame]
+        x: 'Union[FedNdarray, VDataFrame]',
+        y: 'Union[FedNdarray, VDataFrame]'
     ):
         """
         Fit the federated DecisionTreeClassifier model
@@ -177,7 +177,7 @@ class FLDecisionTreeClassifier:
         logging.info("[SL] Federated DecisionTreeClassifier training completed")
         return self
     
-    def predict(self, x: Union[FedNdarray, VDataFrame]):
+    def predict(self, x: 'Union[FedNdarray, VDataFrame]'):
         """
         Predict using federated model
         
@@ -236,7 +236,7 @@ class FLDecisionTreeClassifier:
         """Simple aggregation - for development only"""
         return np.mean(predictions_list, axis=0)
     
-    def score(self, x: Union[FedNdarray, VDataFrame], y: Union[FedNdarray, VDataFrame]):
+    def score(self, x: 'Union[FedNdarray, VDataFrame]', y: 'Union[FedNdarray, VDataFrame]'):
         """
         Compute model score
         

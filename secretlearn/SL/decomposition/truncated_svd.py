@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: BSD-3-Clause
 
 """
-Federated Learning adapter for TruncatedSVD
+Split Learning adapter for TruncatedSVD
 
 TruncatedSVD is an UNSUPERVISED dimensionality reduction algorithm.
 Model split across parties with collaborative training.
@@ -35,9 +35,9 @@ except ImportError:
     SECRETFLOW_AVAILABLE = False
 
 
-class FLTruncatedSVD:
+class SLTruncatedSVD:
     """
-    Federated Learning TruncatedSVD
+    Split Learning TruncatedSVD
     
     TruncatedSVD is an unsupervised dimensionality reduction algorithm.
     
@@ -79,8 +79,8 @@ class FLTruncatedSVD:
     
     def __init__(
         self,
-        devices: Dict[str, PYU],
-        heu: Optional[HEU] = None,
+        devices: Dict[str, 'PYU'],
+        heu: Optional['HEU'] = None,
         aggregation_method: str = 'mean',
         **kwargs
     ):
@@ -101,9 +101,9 @@ class FLTruncatedSVD:
         self._is_fitted = False
         
         if USING_XLEARN:
-            logging.info("[SL] FLTruncatedSVD initialized with JAX acceleration")
+            logging.info("[SL] SLTruncatedSVD initialized with JAX acceleration")
         else:
-            logging.info("[SL] FLTruncatedSVD initialized with sklearn")
+            logging.info("[SL] SLTruncatedSVD initialized with sklearn")
         
         logging.info(f"[SL] Parties: {list(devices.keys())}")
         logging.info(f"[SL] Aggregation: {aggregation_method}")
@@ -114,7 +114,7 @@ class FLTruncatedSVD:
         """Create local TruncatedSVD instance"""
         return TruncatedSVD(**kwargs)
     
-    def fit(self, x: Union[FedNdarray, VDataFrame]):
+    def fit(self, x: 'Union[FedNdarray, VDataFrame]'):
         """
         Fit the federated TruncatedSVD model
         
@@ -160,7 +160,7 @@ class FLTruncatedSVD:
         logging.info("[SL] Federated TruncatedSVD dimensionality reduction completed")
         return self
     
-    def transform(self, x: Union[FedNdarray, VDataFrame]):
+    def transform(self, x: 'Union[FedNdarray, VDataFrame]'):
         """
         Transform data using federated model
         
@@ -202,7 +202,7 @@ class FLTruncatedSVD:
                 logging.warning("[SL] Using non-secure aggregation (HEU not provided)")
                 return self._simple_aggregate_transform(transformed_list)
     
-    def fit_transform(self, x: Union[FedNdarray, VDataFrame]):
+    def fit_transform(self, x: 'Union[FedNdarray, VDataFrame]'):
         """
         Fit the model and transform data
         
@@ -219,7 +219,7 @@ class FLTruncatedSVD:
         self.fit(x)
         return self.transform(x)
     
-    def inverse_transform(self, x: Union[FedNdarray, VDataFrame]):
+    def inverse_transform(self, x: 'Union[FedNdarray, VDataFrame]'):
         """
         Inverse transform data (if supported by the algorithm)
         

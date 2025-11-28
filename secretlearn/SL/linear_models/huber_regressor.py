@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: BSD-3-Clause
 
 """
-Federated Learning adapter for HuberRegressor
+Split Learning adapter for HuberRegressor
 
 HuberRegressor is a SUPERVISED regression/classification algorithm.
 Model split across parties with collaborative training.
@@ -35,9 +35,9 @@ except ImportError:
     SECRETFLOW_AVAILABLE = False
 
 
-class FLHuberRegressor:
+class SLHuberRegressor:
     """
-    Federated Learning HuberRegressor
+    Split Learning HuberRegressor
     
     HuberRegressor is a supervised regression/classification algorithm.
     
@@ -78,8 +78,8 @@ class FLHuberRegressor:
     
     def __init__(
         self,
-        devices: Dict[str, PYU],
-        heu: Optional[HEU] = None,
+        devices: Dict[str, 'PYU'],
+        heu: Optional['HEU'] = None,
         aggregation_method: str = 'mean',
         **kwargs
     ):
@@ -100,9 +100,9 @@ class FLHuberRegressor:
         self._is_fitted = False
         
         if USING_XLEARN:
-            logging.info("[SL] FLHuberRegressor initialized with JAX acceleration")
+            logging.info("[SL] SLHuberRegressor initialized with JAX acceleration")
         else:
-            logging.info("[SL] FLHuberRegressor initialized with sklearn")
+            logging.info("[SL] SLHuberRegressor initialized with sklearn")
         
         logging.info(f"[SL] Parties: {list(devices.keys())}")
         logging.info(f"[SL] Aggregation: {aggregation_method}")
@@ -115,8 +115,8 @@ class FLHuberRegressor:
     
     def fit(
         self,
-        x: Union[FedNdarray, VDataFrame],
-        y: Union[FedNdarray, VDataFrame]
+        x: 'Union[FedNdarray, VDataFrame]',
+        y: 'Union[FedNdarray, VDataFrame]'
     ):
         """
         Fit the federated HuberRegressor model
@@ -177,7 +177,7 @@ class FLHuberRegressor:
         logging.info("[SL] Federated HuberRegressor training completed")
         return self
     
-    def predict(self, x: Union[FedNdarray, VDataFrame]):
+    def predict(self, x: 'Union[FedNdarray, VDataFrame]'):
         """
         Predict using federated model
         
@@ -236,7 +236,7 @@ class FLHuberRegressor:
         """Simple aggregation - for development only"""
         return np.mean(predictions_list, axis=0)
     
-    def score(self, x: Union[FedNdarray, VDataFrame], y: Union[FedNdarray, VDataFrame]):
+    def score(self, x: 'Union[FedNdarray, VDataFrame]', y: 'Union[FedNdarray, VDataFrame]'):
         """
         Compute model score
         

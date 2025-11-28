@@ -35,7 +35,7 @@ except ImportError:
 class FLOneClassSVM:
     """Federated Learning OneClassSVM (Unsupervised)"""
     
-    def __init__(self, devices: Dict[str, PYU], heu: Optional[HEU] = None, aggregation_method: str = 'mean', **kwargs):
+    def __init__(self, devices: Dict[str, 'PYU'], heu: Optional['HEU'] = None, aggregation_method: str = 'mean', **kwargs):
         if not SECRETFLOW_AVAILABLE:
             raise RuntimeError("SecretFlow not installed")
         
@@ -52,7 +52,7 @@ class FLOneClassSVM:
         if USING_XLEARN:
             logging.info("[FL] FLOneClassSVM with JAX acceleration")
     
-    def fit(self, x: Union[FedNdarray, VDataFrame]):
+    def fit(self, x: 'Union[FedNdarray, VDataFrame]'):
         """Fit (unsupervised - no y needed)"""
         if isinstance(x, VDataFrame):
             x = x.values

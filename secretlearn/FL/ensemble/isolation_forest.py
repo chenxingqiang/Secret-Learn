@@ -35,7 +35,7 @@ except ImportError:
 class FLIsolationForest:
     """Federated Learning IsolationForest (Unsupervised)"""
     
-    def __init__(self, devices: Dict[str, PYU], heu: Optional[HEU] = None, aggregation_method: str = 'mean', **kwargs):
+    def __init__(self, devices: Dict[str, 'PYU'], heu: Optional['HEU'] = None, aggregation_method: str = 'mean', **kwargs):
         if not SECRETFLOW_AVAILABLE:
             raise RuntimeError("SecretFlow not installed")
         
@@ -52,7 +52,7 @@ class FLIsolationForest:
         if USING_XLEARN:
             logging.info("[FL] FLIsolationForest with JAX acceleration")
     
-    def fit(self, x: Union[FedNdarray, VDataFrame]):
+    def fit(self, x: 'Union[FedNdarray, VDataFrame]'):
         """Fit (unsupervised - no y needed)"""
         if isinstance(x, VDataFrame):
             x = x.values
@@ -69,7 +69,7 @@ class FLIsolationForest:
         self._is_fitted = True
         return self
 
-    def predict(self, x: Union[FedNdarray, VDataFrame]):
+    def predict(self, x: 'Union[FedNdarray, VDataFrame]'):
         """Predict anomalies (-1 for outliers, 1 for inliers)"""
         if not self._is_fitted:
             raise RuntimeError("Model not fitted")
@@ -86,7 +86,7 @@ class FLIsolationForest:
         
         return predictions_list[0] if len(predictions_list) == 1 else predictions_list
     
-    def score_samples(self, x: Union[FedNdarray, VDataFrame]):
+    def score_samples(self, x: 'Union[FedNdarray, VDataFrame]'):
         """Compute anomaly scores"""
         if not self._is_fitted:
             raise RuntimeError("Model not fitted")

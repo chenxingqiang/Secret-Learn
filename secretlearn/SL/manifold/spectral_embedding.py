@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: BSD-3-Clause
 
 """
-Federated Learning adapter for SpectralEmbedding
+Split Learning adapter for SpectralEmbedding
 
 SpectralEmbedding is an UNSUPERVISED manifold learning algorithm.
 Model split across parties with collaborative training.
@@ -35,9 +35,9 @@ except ImportError:
     SECRETFLOW_AVAILABLE = False
 
 
-class FLSpectralEmbedding:
+class SLSpectralEmbedding:
     """
-    Federated Learning SpectralEmbedding
+    Split Learning SpectralEmbedding
     
     SpectralEmbedding is an unsupervised manifold learning algorithm.
     
@@ -79,8 +79,8 @@ class FLSpectralEmbedding:
     
     def __init__(
         self,
-        devices: Dict[str, PYU],
-        heu: Optional[HEU] = None,
+        devices: Dict[str, 'PYU'],
+        heu: Optional['HEU'] = None,
         aggregation_method: str = 'mean',
         **kwargs
     ):
@@ -101,9 +101,9 @@ class FLSpectralEmbedding:
         self._is_fitted = False
         
         if USING_XLEARN:
-            logging.info("[SL] FLSpectralEmbedding initialized with JAX acceleration")
+            logging.info("[SL] SLSpectralEmbedding initialized with JAX acceleration")
         else:
-            logging.info("[SL] FLSpectralEmbedding initialized with sklearn")
+            logging.info("[SL] SLSpectralEmbedding initialized with sklearn")
         
         logging.info(f"[SL] Parties: {list(devices.keys())}")
         logging.info(f"[SL] Aggregation: {aggregation_method}")
@@ -114,7 +114,7 @@ class FLSpectralEmbedding:
         """Create local SpectralEmbedding instance"""
         return SpectralEmbedding(**kwargs)
     
-    def fit(self, x: Union[FedNdarray, VDataFrame]):
+    def fit(self, x: 'Union[FedNdarray, VDataFrame]'):
         """
         Fit the federated SpectralEmbedding model
         
@@ -160,7 +160,7 @@ class FLSpectralEmbedding:
         logging.info("[SL] Federated SpectralEmbedding manifold learning completed")
         return self
     
-    def transform(self, x: Union[FedNdarray, VDataFrame]):
+    def transform(self, x: 'Union[FedNdarray, VDataFrame]'):
         """
         Transform data using federated model
         
@@ -202,7 +202,7 @@ class FLSpectralEmbedding:
                 logging.warning("[SL] Using non-secure aggregation (HEU not provided)")
                 return self._simple_aggregate_transform(transformed_list)
     
-    def fit_transform(self, x: Union[FedNdarray, VDataFrame]):
+    def fit_transform(self, x: 'Union[FedNdarray, VDataFrame]'):
         """
         Fit the model and transform data
         
@@ -219,7 +219,7 @@ class FLSpectralEmbedding:
         self.fit(x)
         return self.transform(x)
     
-    def inverse_transform(self, x: Union[FedNdarray, VDataFrame]):
+    def inverse_transform(self, x: 'Union[FedNdarray, VDataFrame]'):
         """
         Inverse transform data (if supported by the algorithm)
         

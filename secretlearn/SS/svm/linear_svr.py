@@ -70,7 +70,7 @@ class SSLinearSVR:
     
     def __init__(
         self,
-        spu: SPU,
+        spu: 'SPU',
         **kwargs
     ):
         if not SECRETFLOW_AVAILABLE:
@@ -97,8 +97,8 @@ class SSLinearSVR:
     
     def fit(
         self,
-        x: Union[FedNdarray, VDataFrame],
-        y: Union[FedNdarray, VDataFrame]
+        x: 'Union[FedNdarray, VDataFrame]',
+        y: 'Union[FedNdarray, VDataFrame]'
     ):
         """
         Fit the LinearSVR model in SPU
@@ -142,7 +142,7 @@ class SSLinearSVR:
         logging.info("[SS] LinearSVR training completed in SPU")
         return self
     
-    def predict(self, x: Union[FedNdarray, VDataFrame]):
+    def predict(self, x: 'Union[FedNdarray, VDataFrame]'):
         """
         Predict using model in SPU
         
@@ -172,7 +172,7 @@ class SSLinearSVR:
         
         return predictions
     
-    def score(self, x: Union[FedNdarray, VDataFrame], y: Union[FedNdarray, VDataFrame]):
+    def score(self, x: 'Union[FedNdarray, VDataFrame]', y: 'Union[FedNdarray, VDataFrame]'):
         """
         Compute model score in SPU
         

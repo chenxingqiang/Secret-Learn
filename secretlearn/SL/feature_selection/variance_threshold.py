@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: BSD-3-Clause
 
 """
-Federated Learning adapter for VarianceThreshold
+Split Learning adapter for VarianceThreshold
 
 VarianceThreshold is an UNSUPERVISED feature selection algorithm.
 Model split across parties with collaborative training.
@@ -35,9 +35,9 @@ except ImportError:
     SECRETFLOW_AVAILABLE = False
 
 
-class FLVarianceThreshold:
+class SLVarianceThreshold:
     """
-    Federated Learning VarianceThreshold
+    Split Learning VarianceThreshold
     
     VarianceThreshold is an unsupervised feature selection algorithm that
     removes features with low variance.
@@ -84,8 +84,8 @@ class FLVarianceThreshold:
     
     def __init__(
         self,
-        devices: Dict[str, PYU],
-        heu: Optional[HEU] = None,
+        devices: Dict[str, 'PYU'],
+        heu: Optional['HEU'] = None,
         aggregation_method: str = 'mean',
         **kwargs
     ):
@@ -106,9 +106,9 @@ class FLVarianceThreshold:
         self._is_fitted = False
         
         if USING_XLEARN:
-            logging.info("[SL] FLVarianceThreshold initialized with JAX acceleration")
+            logging.info("[SL] SLVarianceThreshold initialized with JAX acceleration")
         else:
-            logging.info("[SL] FLVarianceThreshold initialized with sklearn")
+            logging.info("[SL] SLVarianceThreshold initialized with sklearn")
         
         logging.info(f"[SL] Parties: {list(devices.keys())}")
         logging.info(f"[SL] Aggregation: {aggregation_method}")
@@ -119,7 +119,7 @@ class FLVarianceThreshold:
         """Create local VarianceThreshold instance"""
         return VarianceThreshold(**kwargs)
     
-    def fit(self, x: Union[FedNdarray, VDataFrame]):
+    def fit(self, x: 'Union[FedNdarray, VDataFrame]'):
         """
         Fit the federated VarianceThreshold
         
@@ -165,7 +165,7 @@ class FLVarianceThreshold:
         logging.info("[SL] Federated VarianceThreshold fitting completed")
         return self
     
-    def transform(self, x: Union[FedNdarray, VDataFrame]):
+    def transform(self, x: 'Union[FedNdarray, VDataFrame]'):
         """
         Select features based on variance threshold
         
@@ -203,7 +203,7 @@ class FLVarianceThreshold:
             # For feature selection, each party keeps their selected features
             return selected_list
     
-    def fit_transform(self, x: Union[FedNdarray, VDataFrame]):
+    def fit_transform(self, x: 'Union[FedNdarray, VDataFrame]'):
         """
         Fit and select features
         
@@ -220,7 +220,7 @@ class FLVarianceThreshold:
         self.fit(x)
         return self.transform(x)
     
-    def inverse_transform(self, x: Union[FedNdarray, VDataFrame]):
+    def inverse_transform(self, x: 'Union[FedNdarray, VDataFrame]'):
         """
         Inverse transform (restore removed features with zeros)
         

@@ -43,7 +43,7 @@ class SLSGDOneClassSVM:
         if USING_XLEARN:
             logging.info(f"[SL] SLSGDOneClassSVM with JAX acceleration")
     
-    def fit(self, x: Union[FedNdarray, VDataFrame], y: Union[FedNdarray, VDataFrame], epochs: int = 10):
+    def fit(self, x: 'Union[FedNdarray, VDataFrame]', y: 'Union[FedNdarray, VDataFrame]', epochs: int = 10):
         """Fit (supervised, iterative training in PYU)"""
         if isinstance(x, VDataFrame):
             x = x.values
@@ -72,7 +72,7 @@ class SLSGDOneClassSVM:
         self._is_fitted = True
         return self
     
-    def predict(self, x: Union[FedNdarray, VDataFrame]):
+    def predict(self, x: 'Union[FedNdarray, VDataFrame]'):
         """Predict using model in PYU"""
         if not self._is_fitted:
             raise RuntimeError("Model not fitted")

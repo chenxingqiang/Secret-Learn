@@ -35,7 +35,7 @@ except ImportError:
 class FLSGDOneClassSVM:
     """Federated Learning SGDOneClassSVM (Supervised, Iterative)"""
     
-    def __init__(self, devices: Dict[str, PYU], heu: Optional[HEU] = None, **kwargs):
+    def __init__(self, devices: Dict[str, 'PYU'], heu: Optional['HEU'] = None, **kwargs):
         if not SECRETFLOW_AVAILABLE:
             raise RuntimeError("SecretFlow not installed")
         
@@ -51,7 +51,7 @@ class FLSGDOneClassSVM:
         if USING_XLEARN:
             logging.info("[FL] FLSGDOneClassSVM with JAX acceleration")
     
-    def fit(self, x: Union[FedNdarray, VDataFrame], y: Union[FedNdarray, VDataFrame], epochs: int = 10):
+    def fit(self, x: 'Union[FedNdarray, VDataFrame]', y: 'Union[FedNdarray, VDataFrame]', epochs: int = 10):
         """Fit (supervised, iterative with partial_fit)"""
         if isinstance(x, VDataFrame):
             x = x.values
@@ -86,7 +86,7 @@ class FLSGDOneClassSVM:
         self._is_fitted = True
         return self
     
-    def partial_fit(self, x: Union[FedNdarray, VDataFrame], y: Union[FedNdarray, VDataFrame], classes=None):
+    def partial_fit(self, x: 'Union[FedNdarray, VDataFrame]', y: 'Union[FedNdarray, VDataFrame]', classes=None):
         """Incremental fit on a batch"""
         if isinstance(x, VDataFrame):
             x = x.values
@@ -107,7 +107,7 @@ class FLSGDOneClassSVM:
         self._is_fitted = True
         return self
     
-    def predict(self, x: Union[FedNdarray, VDataFrame]):
+    def predict(self, x: 'Union[FedNdarray, VDataFrame]'):
         """Predict using federated model"""
         if not self._is_fitted:
             raise RuntimeError("Model not fitted")

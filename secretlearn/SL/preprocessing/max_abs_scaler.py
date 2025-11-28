@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: BSD-3-Clause
 
 """
-Federated Learning adapter for MaxAbsScaler
+Split Learning adapter for MaxAbsScaler
 
 MaxAbsScaler is an UNSUPERVISED preprocessing algorithm.
 Model split across parties with collaborative training.
@@ -35,9 +35,9 @@ except ImportError:
     SECRETFLOW_AVAILABLE = False
 
 
-class FLMaxAbsScaler:
+class SLMaxAbsScaler:
     """
-    Federated Learning MaxAbsScaler
+    Split Learning MaxAbsScaler
     
     MaxAbsScaler is an unsupervised preprocessing algorithm.
     
@@ -82,8 +82,8 @@ class FLMaxAbsScaler:
     
     def __init__(
         self,
-        devices: Dict[str, PYU],
-        heu: Optional[HEU] = None,
+        devices: Dict[str, 'PYU'],
+        heu: Optional['HEU'] = None,
         aggregation_method: str = 'mean',
         **kwargs
     ):
@@ -104,9 +104,9 @@ class FLMaxAbsScaler:
         self._is_fitted = False
         
         if USING_XLEARN:
-            logging.info("[SL] FLMaxAbsScaler initialized with JAX acceleration")
+            logging.info("[SL] SLMaxAbsScaler initialized with JAX acceleration")
         else:
-            logging.info("[SL] FLMaxAbsScaler initialized with sklearn")
+            logging.info("[SL] SLMaxAbsScaler initialized with sklearn")
         
         logging.info(f"[SL] Parties: {list(devices.keys())}")
         logging.info(f"[SL] Aggregation: {aggregation_method}")
@@ -117,7 +117,7 @@ class FLMaxAbsScaler:
         """Create local MaxAbsScaler instance"""
         return MaxAbsScaler(**kwargs)
     
-    def fit(self, x: Union[FedNdarray, VDataFrame]):
+    def fit(self, x: 'Union[FedNdarray, VDataFrame]'):
         """
         Fit the federated MaxAbsScaler
         
@@ -162,7 +162,7 @@ class FLMaxAbsScaler:
         logging.info("[SL] Federated MaxAbsScaler fitting completed")
         return self
     
-    def transform(self, x: Union[FedNdarray, VDataFrame]):
+    def transform(self, x: 'Union[FedNdarray, VDataFrame]'):
         """
         Transform data using federated preprocessor
         
@@ -202,7 +202,7 @@ class FLMaxAbsScaler:
             # Each party's data is independently transformed
             return transformed_list
     
-    def fit_transform(self, x: Union[FedNdarray, VDataFrame]):
+    def fit_transform(self, x: 'Union[FedNdarray, VDataFrame]'):
         """
         Fit the preprocessor and transform data
         
@@ -219,7 +219,7 @@ class FLMaxAbsScaler:
         self.fit(x)
         return self.transform(x)
     
-    def inverse_transform(self, x: Union[FedNdarray, VDataFrame]):
+    def inverse_transform(self, x: 'Union[FedNdarray, VDataFrame]'):
         """
         Inverse transform data (if supported by the algorithm)
         

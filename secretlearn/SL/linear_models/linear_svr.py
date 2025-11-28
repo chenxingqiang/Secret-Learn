@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: BSD-3-Clause
 
 """
-Federated Learning adapter for LinearSVR
+Split Learning adapter for LinearSVR
 
 Model split across parties with collaborative training.
 HEU-based secure aggregation.
@@ -34,9 +34,9 @@ except ImportError:
     SECRETFLOW_AVAILABLE = False
     
 
-class FLLinearSVR:
+class SLLinearSVR:
     """
-    Federated Learning LinearSVR
+    Split Learning LinearSVR
     
     Data stays in local PYUs with JAX-accelerated computation.
     Gradients/parameters securely aggregated via HEU encryption.
@@ -63,7 +63,7 @@ class FLLinearSVR:
     >>> model.fit(fed_X, fed_y, epochs=10)
     """
     
-    def __init__(self, devices: Dict[str, PYU], heu: HEU = None, **kwargs):
+    def __init__(self, devices: Dict[str, 'PYU'], heu: HEU = None, **kwargs):
         if not SECRETFLOW_AVAILABLE:
             raise RuntimeError("SecretFlow not installed")
         
@@ -77,7 +77,7 @@ class FLLinearSVR:
             self.local_models[party_name] = device(self._create_local_model)(**kwargs)
         
         if USING_XLEARN:
-            logging.info(f"[SL] FLLinearSVR with JAX acceleration")
+            logging.info(f"[SL] SLLinearSVR with JAX acceleration")
         else:
             logging.info(f"[SL] FLLinearSVR with sklearn")
     
@@ -88,8 +88,8 @@ class FLLinearSVR:
     
     def fit(
         self,
-        x: Union[FedNdarray, VDataFrame],
-        y: Union[FedNdarray, VDataFrame],
+        x: 'Union[FedNdarray, VDataFrame]',
+        y: 'Union[FedNdarray, VDataFrame]',
         epochs: int = 10,
         batch_size: int = 128,
     ):
@@ -153,7 +153,7 @@ class FLLinearSVR:
         logging.info("[SL] Federated training completed")
         return self
     
-    def predict(self, x: Union[FedNdarray, VDataFrame]):
+    def predict(self, x: 'Union[FedNdarray, VDataFrame]'):
         """Predict using federated model"""
         # Each party computes local predictions, then aggregate
         if isinstance(x, VDataFrame):

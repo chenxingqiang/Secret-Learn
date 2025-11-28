@@ -32,7 +32,7 @@ except ImportError:
 class SSPassiveAggressiveClassifier:
     """Secret Sharing PassiveAggressiveClassifier (Supervised, Iterative)"""
     
-    def __init__(self, spu: SPU, **kwargs):
+    def __init__(self, spu: 'SPU', **kwargs):
         if not SECRETFLOW_AVAILABLE:
             raise RuntimeError("SecretFlow not installed")
         
@@ -44,7 +44,7 @@ class SSPassiveAggressiveClassifier:
         if USING_XLEARN:
             logging.info(f"[SS] SSPassiveAggressiveClassifier with JAX acceleration")
     
-    def fit(self, x: Union[FedNdarray, VDataFrame], y: Union[FedNdarray, VDataFrame], epochs: int = 10):
+    def fit(self, x: 'Union[FedNdarray, VDataFrame]', y: 'Union[FedNdarray, VDataFrame]', epochs: int = 10):
         """Fit (supervised, iterative)"""
         if isinstance(x, VDataFrame):
             x = x.values
@@ -73,7 +73,7 @@ class SSPassiveAggressiveClassifier:
         self._is_fitted = True
         return self
     
-    def predict(self, x: Union[FedNdarray, VDataFrame]):
+    def predict(self, x: 'Union[FedNdarray, VDataFrame]'):
         """Predict using model in SPU"""
         if not self._is_fitted:
             raise RuntimeError("Model not fitted")

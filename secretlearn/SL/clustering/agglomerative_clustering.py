@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: BSD-3-Clause
 
 """
-Federated Learning adapter for AgglomerativeClustering
+Split Learning adapter for AgglomerativeClustering
 
 AgglomerativeClustering is an UNSUPERVISED clustering algorithm.
 Model split across parties with collaborative training.
@@ -35,9 +35,9 @@ except ImportError:
     SECRETFLOW_AVAILABLE = False
 
 
-class FLAgglomerativeClustering:
+class SLAgglomerativeClustering:
     """
-    Federated Learning AgglomerativeClustering
+    Split Learning AgglomerativeClustering
     
     AgglomerativeClustering is an unsupervised clustering algorithm.
     
@@ -79,8 +79,8 @@ class FLAgglomerativeClustering:
     
     def __init__(
         self,
-        devices: Dict[str, PYU],
-        heu: Optional[HEU] = None,
+        devices: Dict[str, 'PYU'],
+        heu: Optional['HEU'] = None,
         aggregation_method: str = 'mean',
         **kwargs
     ):
@@ -101,9 +101,9 @@ class FLAgglomerativeClustering:
         self._is_fitted = False
         
         if USING_XLEARN:
-            logging.info("[SL] FLAgglomerativeClustering initialized with JAX acceleration")
+            logging.info("[SL] SLAgglomerativeClustering initialized with JAX acceleration")
         else:
-            logging.info("[SL] FLAgglomerativeClustering initialized with sklearn")
+            logging.info("[SL] SLAgglomerativeClustering initialized with sklearn")
         
         logging.info(f"[SL] Parties: {list(devices.keys())}")
         logging.info(f"[SL] Aggregation: {aggregation_method}")
@@ -114,7 +114,7 @@ class FLAgglomerativeClustering:
         """Create local AgglomerativeClustering instance"""
         return AgglomerativeClustering(**kwargs)
     
-    def fit(self, x: Union[FedNdarray, VDataFrame]):
+    def fit(self, x: 'Union[FedNdarray, VDataFrame]'):
         """
         Fit the federated AgglomerativeClustering model
         
@@ -160,7 +160,7 @@ class FLAgglomerativeClustering:
         logging.info("[SL] Federated AgglomerativeClustering clustering completed")
         return self
     
-    def predict(self, x: Union[FedNdarray, VDataFrame]):
+    def predict(self, x: 'Union[FedNdarray, VDataFrame]'):
         """
         Predict cluster assignments using federated model
         
@@ -202,7 +202,7 @@ class FLAgglomerativeClustering:
                 logging.warning("[SL] Using non-secure aggregation (HEU not provided)")
                 return self._simple_aggregate_labels(predictions_list)
     
-    def fit_predict(self, x: Union[FedNdarray, VDataFrame]):
+    def fit_predict(self, x: 'Union[FedNdarray, VDataFrame]'):
         """
         Fit the model and predict cluster assignments
         

@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: BSD-3-Clause
 
 """
-Federated Learning adapter for QuantileTransformer
+Split Learning adapter for QuantileTransformer
 
 QuantileTransformer is an UNSUPERVISED preprocessing algorithm.
 Model split across parties with collaborative training.
@@ -35,9 +35,9 @@ except ImportError:
     SECRETFLOW_AVAILABLE = False
 
 
-class FLQuantileTransformer:
+class SLQuantileTransformer:
     """
-    Federated Learning QuantileTransformer
+    Split Learning QuantileTransformer
     
     QuantileTransformer is an unsupervised preprocessing algorithm.
     
@@ -82,8 +82,8 @@ class FLQuantileTransformer:
     
     def __init__(
         self,
-        devices: Dict[str, PYU],
-        heu: Optional[HEU] = None,
+        devices: Dict[str, 'PYU'],
+        heu: Optional['HEU'] = None,
         aggregation_method: str = 'mean',
         **kwargs
     ):
@@ -104,9 +104,9 @@ class FLQuantileTransformer:
         self._is_fitted = False
         
         if USING_XLEARN:
-            logging.info("[SL] FLQuantileTransformer initialized with JAX acceleration")
+            logging.info("[SL] SLQuantileTransformer initialized with JAX acceleration")
         else:
-            logging.info("[SL] FLQuantileTransformer initialized with sklearn")
+            logging.info("[SL] SLQuantileTransformer initialized with sklearn")
         
         logging.info(f"[SL] Parties: {list(devices.keys())}")
         logging.info(f"[SL] Aggregation: {aggregation_method}")
@@ -117,7 +117,7 @@ class FLQuantileTransformer:
         """Create local QuantileTransformer instance"""
         return QuantileTransformer(**kwargs)
     
-    def fit(self, x: Union[FedNdarray, VDataFrame]):
+    def fit(self, x: 'Union[FedNdarray, VDataFrame]'):
         """
         Fit the federated QuantileTransformer
         
@@ -162,7 +162,7 @@ class FLQuantileTransformer:
         logging.info("[SL] Federated QuantileTransformer fitting completed")
         return self
     
-    def transform(self, x: Union[FedNdarray, VDataFrame]):
+    def transform(self, x: 'Union[FedNdarray, VDataFrame]'):
         """
         Transform data using federated preprocessor
         
@@ -202,7 +202,7 @@ class FLQuantileTransformer:
             # Each party's data is independently transformed
             return transformed_list
     
-    def fit_transform(self, x: Union[FedNdarray, VDataFrame]):
+    def fit_transform(self, x: 'Union[FedNdarray, VDataFrame]'):
         """
         Fit the preprocessor and transform data
         
@@ -219,7 +219,7 @@ class FLQuantileTransformer:
         self.fit(x)
         return self.transform(x)
     
-    def inverse_transform(self, x: Union[FedNdarray, VDataFrame]):
+    def inverse_transform(self, x: 'Union[FedNdarray, VDataFrame]'):
         """
         Inverse transform data (if supported by the algorithm)
         

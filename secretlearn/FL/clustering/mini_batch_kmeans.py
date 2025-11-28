@@ -79,8 +79,8 @@ class FLMiniBatchKMeans:
     
     def __init__(
         self,
-        devices: Dict[str, PYU],
-        heu: Optional[HEU] = None,
+        devices: Dict[str, 'PYU'],
+        heu: Optional['HEU'] = None,
         aggregation_method: str = 'mean',
         **kwargs
     ):
@@ -114,7 +114,7 @@ class FLMiniBatchKMeans:
         """Create local MiniBatchKMeans instance"""
         return MiniBatchKMeans(**kwargs)
     
-    def fit(self, x: Union[FedNdarray, VDataFrame]):
+    def fit(self, x: 'Union[FedNdarray, VDataFrame]'):
         """
         Fit the federated MiniBatchKMeans model
         
@@ -160,7 +160,7 @@ class FLMiniBatchKMeans:
         logging.info("[FL] Federated MiniBatchKMeans clustering completed")
         return self
     
-    def predict(self, x: Union[FedNdarray, VDataFrame]):
+    def predict(self, x: 'Union[FedNdarray, VDataFrame]'):
         """
         Predict cluster assignments using federated model
         
@@ -202,7 +202,7 @@ class FLMiniBatchKMeans:
                 logging.warning("[FL] Using non-secure aggregation (HEU not provided)")
                 return self._simple_aggregate_labels(predictions_list)
     
-    def fit_predict(self, x: Union[FedNdarray, VDataFrame]):
+    def fit_predict(self, x: 'Union[FedNdarray, VDataFrame]'):
         """
         Fit the model and predict cluster assignments
         

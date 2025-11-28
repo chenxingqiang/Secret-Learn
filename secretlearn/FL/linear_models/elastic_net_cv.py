@@ -68,8 +68,8 @@ class FLElasticNetCV:
     
     def __init__(
         self,
-        devices: Dict[str, PYU],
-        heu: Optional[HEU] = None,
+        devices: Dict[str, 'PYU'],
+        heu: Optional['HEU'] = None,
         **kwargs
     ):
         if not SECRETFLOW_AVAILABLE:
@@ -94,7 +94,7 @@ class FLElasticNetCV:
     def _create_local_model(**kwargs):
         return ElasticNetCV(**kwargs)
     
-    def fit(self, x: Union[FedNdarray, VDataFrame], y: Union[FedNdarray, VDataFrame]):
+    def fit(self, x: 'Union[FedNdarray, VDataFrame]', y: 'Union[FedNdarray, VDataFrame]'):
         """Fit with cross-validation"""
         if isinstance(x, VDataFrame):
             x = x.values
@@ -126,7 +126,7 @@ class FLElasticNetCV:
         self._is_fitted = True
         return self
     
-    def predict(self, x: Union[FedNdarray, VDataFrame]):
+    def predict(self, x: 'Union[FedNdarray, VDataFrame]'):
         """Predict using federated model"""
         if not self._is_fitted:
             raise RuntimeError("Model must be fitted before prediction")

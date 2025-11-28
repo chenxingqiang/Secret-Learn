@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: BSD-3-Clause
 
 """
-Federated Learning adapter for SpectralClustering
+Split Learning adapter for SpectralClustering
 
 SpectralClustering is an UNSUPERVISED clustering algorithm.
 Model split across parties with collaborative training.
@@ -35,9 +35,9 @@ except ImportError:
     SECRETFLOW_AVAILABLE = False
 
 
-class FLSpectralClustering:
+class SLSpectralClustering:
     """
-    Federated Learning SpectralClustering
+    Split Learning SpectralClustering
     
     SpectralClustering is an unsupervised clustering algorithm.
     
@@ -79,8 +79,8 @@ class FLSpectralClustering:
     
     def __init__(
         self,
-        devices: Dict[str, PYU],
-        heu: Optional[HEU] = None,
+        devices: Dict[str, 'PYU'],
+        heu: Optional['HEU'] = None,
         aggregation_method: str = 'mean',
         **kwargs
     ):
@@ -101,9 +101,9 @@ class FLSpectralClustering:
         self._is_fitted = False
         
         if USING_XLEARN:
-            logging.info("[SL] FLSpectralClustering initialized with JAX acceleration")
+            logging.info("[SL] SLSpectralClustering initialized with JAX acceleration")
         else:
-            logging.info("[SL] FLSpectralClustering initialized with sklearn")
+            logging.info("[SL] SLSpectralClustering initialized with sklearn")
         
         logging.info(f"[SL] Parties: {list(devices.keys())}")
         logging.info(f"[SL] Aggregation: {aggregation_method}")
@@ -114,7 +114,7 @@ class FLSpectralClustering:
         """Create local SpectralClustering instance"""
         return SpectralClustering(**kwargs)
     
-    def fit(self, x: Union[FedNdarray, VDataFrame]):
+    def fit(self, x: 'Union[FedNdarray, VDataFrame]'):
         """
         Fit the federated SpectralClustering model
         
@@ -160,7 +160,7 @@ class FLSpectralClustering:
         logging.info("[SL] Federated SpectralClustering clustering completed")
         return self
     
-    def predict(self, x: Union[FedNdarray, VDataFrame]):
+    def predict(self, x: 'Union[FedNdarray, VDataFrame]'):
         """
         Predict cluster assignments using federated model
         
@@ -202,7 +202,7 @@ class FLSpectralClustering:
                 logging.warning("[SL] Using non-secure aggregation (HEU not provided)")
                 return self._simple_aggregate_labels(predictions_list)
     
-    def fit_predict(self, x: Union[FedNdarray, VDataFrame]):
+    def fit_predict(self, x: 'Union[FedNdarray, VDataFrame]'):
         """
         Fit the model and predict cluster assignments
         

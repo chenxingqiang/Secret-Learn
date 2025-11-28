@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: BSD-3-Clause
 
 """
-Federated Learning adapter for RidgeCV
+Split Learning adapter for RidgeCV
 
 RidgeCV is a SUPERVISED cross-validation model.
 Model split across parties with collaborative training.
@@ -35,9 +35,9 @@ except ImportError:
     SECRETFLOW_AVAILABLE = False
 
 
-class FLRidgeCV:
+class SLRidgeCV:
     """
-    Federated Learning RidgeCV
+    Split Learning RidgeCV
     
     Cross-validation model with automatic hyperparameter tuning.
     
@@ -68,8 +68,8 @@ class FLRidgeCV:
     
     def __init__(
         self,
-        devices: Dict[str, PYU],
-        heu: Optional[HEU] = None,
+        devices: Dict[str, 'PYU'],
+        heu: Optional['HEU'] = None,
         **kwargs
     ):
         if not SECRETFLOW_AVAILABLE:
@@ -86,15 +86,15 @@ class FLRidgeCV:
         self._is_fitted = False
         
         if USING_XLEARN:
-            logging.info("[SL] FLRidgeCV initialized with JAX acceleration")
+            logging.info("[SL] SLRidgeCV initialized with JAX acceleration")
         else:
-            logging.info("[SL] FLRidgeCV initialized with sklearn")
+            logging.info("[SL] SLRidgeCV initialized with sklearn")
     
     @staticmethod
     def _create_local_model(**kwargs):
         return RidgeCV(**kwargs)
     
-    def fit(self, x: Union[FedNdarray, VDataFrame], y: Union[FedNdarray, VDataFrame]):
+    def fit(self, x: 'Union[FedNdarray, VDataFrame]', y: 'Union[FedNdarray, VDataFrame]'):
         """Fit with cross-validation"""
         if isinstance(x, VDataFrame):
             x = x.values
@@ -126,7 +126,7 @@ class FLRidgeCV:
         self._is_fitted = True
         return self
     
-    def predict(self, x: Union[FedNdarray, VDataFrame]):
+    def predict(self, x: 'Union[FedNdarray, VDataFrame]'):
         """Predict using federated model"""
         if not self._is_fitted:
             raise RuntimeError("Model must be fitted before prediction")
