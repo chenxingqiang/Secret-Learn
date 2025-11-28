@@ -60,7 +60,7 @@ def run_example(example_file, log_dir, force_run=False):
             [sys.executable, str(example_file)],
             capture_output=True,
             text=True,
-            timeout=300,  # 5 minutes timeout
+            timeout=1800,  # 30 minutes timeout
             cwd=example_file.parent.parent.parent
         )
 
