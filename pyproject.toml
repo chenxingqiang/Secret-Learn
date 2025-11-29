@@ -1,6 +1,6 @@
 [project]
-name = "Secret-Learn"
-version = "0.2.2"
+name = "secret-learn"
+version = "0.2.3"
 description = "Privacy-preserving machine learning with SecretFlow - 573 implementations (191 algorithms × 3 modes: FL/SS/SL) with JAX acceleration"
 readme = "README.md"
 authors = [
