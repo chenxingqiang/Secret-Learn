@@ -53,7 +53,7 @@ Secret-Learn features a 6-layer architecture that seamlessly integrates JAX acce
 5. **JAX Acceleration** - 5x+ performance boost with hardware abstraction
 6. **SecretFlow Integration** - SPU, HEU, TEE devices for privacy computation
 
-For detailed architecture documentation, see [ARCHITECTURE.md](ARCHITECTURE.md).
+For detailed architecture documentation, see [ARCHITECTURE.md](doc/ARCHITECTURE.md).
 
 ---
 
