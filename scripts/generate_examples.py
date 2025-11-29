@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-all example file
+Generate example files for FL/SS/SL modes
 """
 
 import os
@@ -8,8 +8,26 @@ import re
 import sys
 from pathlib import Path
 
-sys.path.insert(0, '/Users/xingqiangchen/jax-sklearn')
-from secretlearn.algorithm_classifier import classify_algorithm
+BASE_PATH = '/Users/xingqiangchen/secret-learn'
+sys.path.insert(0, BASE_PATH)
+
+try:
+    from secretlearn.algorithm_classifier import classify_algorithm
+except ImportError:
+    def classify_algorithm(name):
+        """Fallback classifier"""
+        unsupervised = ['KMeans', 'PCA', 'DBSCAN', 'AgglomerativeClustering', 
+                       'SpectralClustering', 'Birch', 'MeanShift', 'OPTICS',
+                       'TruncatedSVD', 'NMF', 'FactorAnalysis', 'FastICA',
+                       'LatentDirichletAllocation', 'SparsePCA', 'MiniBatchSparsePCA',
+                       'IsolationForest', 'LocalOutlierFactor', 'OneClassSVM',
+                       'TSNE', 'SpectralEmbedding', 'Isomap', 'MDS', 'LocallyLinearEmbedding']
+        epochs = ['MLPClassifier', 'MLPRegressor', 'SGDClassifier', 'SGDRegressor',
+                 'Perceptron', 'PassiveAggressiveClassifier', 'PassiveAggressiveRegressor']
+        return {
+            'is_unsupervised': name in unsupervised or any(u in name for u in unsupervised),
+            'use_epochs': name in epochs or any(e in name for e in epochs)
+        }
 
 def camel_to_snake(name):
     """"""
@@ -21,21 +39,53 @@ def snake_to_camel(snake_str):
     components = snake_str.split('_')
     return ''.join(x.title() for x in components)
 
-def generate_example(algo_name, category, mode):
+
+def get_actual_class_name(mode, category, snake_name):
     """
-    correct example file
+    Read the actual class name from the secretlearn module file.
+    Returns the correct class name (e.g., SSAdaBoostRegressor not SSAdaboostRegressor)
+    """
+    module_path = Path(BASE_PATH) / 'secretlearn' / mode / category / f'{snake_name}.py'
+    
+    if not module_path.exists():
+        return None
+    
+    try:
+        with open(module_path, 'r', encoding='utf-8') as f:
+            content = f.read()
+        
+        # Find class definition: class SSXxx: or class FLXxx: or class SLXxx:
+        match = re.search(rf'^class ({mode}[A-Za-z0-9]+)[\s:(]', content, re.MULTILINE)
+        if match:
+            return match.group(1)
+    except:
+        pass
+    
+    return None
+
+
+def generate_example(algo_name, category, mode, actual_class_name=None):
+    """
+    Generate correct example file
     
     Parameters
     ----------
     algo_name : str
-        ， 'LinearSVC'
+        Algorithm name, e.g., 'LinearSVC'
     category : str
-        ， 'svm'
+        Category, e.g., 'svm'
     mode : str
         'FL', 'SS', or 'SL'
+    actual_class_name : str, optional
+        The actual class name from the module (to handle case differences)
     """
     snake_name = camel_to_snake(algo_name)
-    class_name = f"{mode}{algo_name}"
+    
+    # Use actual class name if provided, otherwise construct it
+    if actual_class_name:
+        class_name = actual_class_name
+    else:
+        class_name = f"{mode}{algo_name}"
     
     # 
     try:
@@ -324,33 +374,176 @@ def regenerate_problematic_examples(base_path):
     print(f"\n: {regenerated} file")
     return regenerated
 
+def regenerate_ss_only(base_path, force=False):
+    """Regenerate only SS example files"""
+    print("=" * 70)
+    print("Regenerating SS example files")
+    print("=" * 70)
+    
+    examples_path = Path(base_path) / 'examples' / 'SS'
+    
+    if not examples_path.exists():
+        print(f"Error: {examples_path} does not exist")
+        return 0
+    
+    regenerated = 0
+    errors = []
+    
+    for py_file in sorted(examples_path.glob('*.py')):
+        if py_file.name == '__init__.py':
+            continue
+        
+        try:
+            # Read existing file to get category
+            with open(py_file, 'r', encoding='utf-8') as f:
+                content = f.read()
+            
+            # Check if needs regeneration
+            needs_regen = force
+            if not force:
+                try:
+                    compile(content, py_file.name, 'exec')
+                except SyntaxError:
+                    needs_regen = True
+            
+            if not needs_regen:
+                continue
+            
+            # Extract info
+            filename = py_file.stem
+            algo_name = snake_to_camel(filename)
+            category = get_category_from_import(content)
+            
+            if not category:
+                # Try to guess category from secretlearn module structure
+                category = guess_category(algo_name)
+                if not category:
+                    errors.append((py_file.name, "Cannot determine category"))
+                    continue
+            
+            # Get the actual class name from the module file
+            actual_class_name = get_actual_class_name('SS', category, filename)
+            
+            # Generate new content with the correct class name
+            new_content = generate_example(algo_name, category, 'SS', actual_class_name)
+            
+            # Verify syntax before writing
+            try:
+                compile(new_content, py_file.name, 'exec')
+            except SyntaxError as e:
+                errors.append((py_file.name, f"Generated code has syntax error: {e}"))
+                continue
+            
+            with open(py_file, 'w', encoding='utf-8') as f:
+                f.write(new_content)
+            
+            regenerated += 1
+            print(f"✓ {py_file.name}")
+            
+        except Exception as e:
+            errors.append((py_file.name, str(e)))
+    
+    print("=" * 70)
+    print(f"Regenerated: {regenerated} files")
+    
+    if errors:
+        print(f"\nErrors ({len(errors)}):")
+        for fname, err in errors[:10]:
+            print(f"  ✗ {fname}: {err[:60]}")
+    
+    return regenerated
+
+
+def guess_category(algo_name):
+    """Guess the category based on algorithm name"""
+    name_lower = algo_name.lower()
+    
+    category_map = {
+        'linear_models': ['linear', 'ridge', 'lasso', 'elastic', 'sgd', 'perceptron', 
+                         'logistic', 'bayesian', 'ard', 'lars', 'omp', 'huber',
+                         'ransac', 'theilsen', 'passiveaggressive', 'tweedie', 
+                         'poisson', 'gamma', 'quantile'],
+        'ensemble': ['forest', 'boosting', 'adaboost', 'bagging', 'voting', 'stacking',
+                    'histgradient', 'extratree', 'isolation'],
+        'svm': ['svc', 'svr', 'nusvc', 'nusvr', 'linearsvc', 'linearsvr', 'onesvm'],
+        'tree': ['decision', 'extratree'],
+        'neighbors': ['kneighbors', 'radiusneighbors', 'nearestneighbors', 
+                     'nearestcentroid', 'localoutlier', 'knn'],
+        'clustering': ['kmeans', 'dbscan', 'agglomerative', 'spectralclustering',
+                      'birch', 'meanshift', 'optics', 'affinity', 'featureagglom',
+                      'minibatchkmeans', 'bisectingkmeans'],
+        'decomposition': ['pca', 'svd', 'nmf', 'ica', 'lda', 'factor', 'sparse',
+                         'dictionary', 'minibatchdictionary', 'minibatchnmf',
+                         'truncatedsvd', 'kernelpca', 'incrementalpca'],
+        'preprocessing': ['scaler', 'normalizer', 'binarizer', 'encoder', 
+                         'transformer', 'imputer', 'discretizer', 'polynomial',
+                         'spline', 'kbins', 'quantile', 'power', 'maxabs',
+                         'minmax', 'standard', 'robust', 'label', 'ordinal',
+                         'onehot', 'target', 'function'],
+        'naive_bayes': ['naive', 'bayes', 'gaussian', 'multinomial', 'bernoulli',
+                       'complement', 'categorical'],
+        'neural_network': ['mlp', 'perceptron', 'bernoulli'],
+        'discriminant_analysis': ['lda', 'qda', 'lineardiscriminant', 'quadraticdiscriminant'],
+        'gaussian_process': ['gaussian', 'gp'],
+        'manifold': ['tsne', 'isomap', 'mds', 'spectralembedding', 'locallylinear'],
+        'feature_selection': ['selectk', 'selectpercentile', 'selectfpr', 'selectfdr',
+                             'selectfwe', 'rfe', 'rfecv', 'variancethreshold',
+                             'selectfrommodel', 'sequentialfeature', 'genericunivariateselect'],
+        'covariance': ['covariance', 'empirical', 'shrunk', 'oas', 'ledoitwolf',
+                      'mincovdet', 'graphicallasso', 'ellipticenvelope'],
+        'kernel_approximation': ['rbfsampler', 'nystroem', 'additivech', 'skewedchi',
+                                'polynomial'],
+        'multiclass': ['onevsrest', 'onevsone', 'outputcode'],
+        'multioutput': ['multioutput', 'classifierchain', 'regressorchain'],
+        'calibration': ['calibrated'],
+        'isotonic': ['isotonic'],
+        'cross_decomposition': ['pls', 'cca'],
+        'impute': ['simpleimputer', 'knnimputer', 'iterativeimputer'],
+        'semi_supervised': ['labelpropagation', 'labelspreading', 'selftraining'],
+        'kernel_ridge': ['kernelridge'],
+        'random_projection': ['gaussianrandomprojection', 'sparserandomprojection'],
+        'dummy': ['dummy'],
+        'feature_extraction': ['dictvectorizer', 'featurehasher'],
+        'mixture': ['gaussianmixture', 'bayesiangaussianmixture'],
+        'anomaly_detection': ['isolationforest', 'localoutlierfactor', 'oneclasssvm'],
+    }
+    
+    for category, keywords in category_map.items():
+        for keyword in keywords:
+            if keyword in name_lower:
+                return category
+    
+    return 'clustering'  # Default fallback
+
+
 def main():
-    base_path = '/Users/xingqiangchen/jax-sklearn'
+    import argparse
     
-    print("="*90)
-    print("Example file")
-    print("="*90)
-    print()
-    print(" example file:")
-    print("  - ")
-    print("  - ")
-    print("  - ")
-    print("  - correct")
+    parser = argparse.ArgumentParser(description='Generate example files')
+    parser.add_argument('--mode', choices=['FL', 'SS', 'SL', 'all'], default='SS',
+                       help='Which mode to regenerate (default: SS)')
+    parser.add_argument('--force', action='store_true',
+                       help='Force regenerate all files, not just those with errors')
+    args = parser.parse_args()
+    
+    print("=" * 70)
+    print("Example File Generator")
+    print("=" * 70)
     print()
     
-    response = input("？(yes/no): ")
-    if response.lower() not in ['yes', 'y']:
-        print("")
+    if args.mode == 'SS':
+        count = regenerate_ss_only(BASE_PATH, force=args.force)
+    elif args.mode == 'all':
+        count = regenerate_problematic_examples(BASE_PATH)
+    else:
+        print(f"Mode {args.mode} not yet implemented, use SS or all")
         return
     
-    # 
-    count = regenerate_problematic_examples(base_path)
-    
-    print("\n" + "="*90)
-    print("Example filecompleted！")
-    print("="*90)
-    print(f": {count} file")
     print()
+    print("=" * 70)
+    print(f"Completed! Regenerated {count} files")
+    print("=" * 70)
+
 
 if __name__ == '__main__':
     main()
