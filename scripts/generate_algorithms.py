@@ -20,13 +20,13 @@ import os
 import sys
 import re
 
-# 添加 secretlearn 到路径
+# Add secretlearn 
 sys.path.insert(0, '/Users/xingqiangchen/jax-sklearn')
 
 from secretlearn.algorithm_classifier import classify_algorithm
 from secretlearn.template_generator import generate_template
 
-# 缺失算法列表
+# 
 MISSING_ALGORITHMS = {
     'linear_models': {
         'display_name': 'Linear Models',
@@ -66,7 +66,7 @@ MISSING_ALGORITHMS = {
     },
     'discriminant_analysis': {
         'display_name': 'Discriminant Analysis',
-        'algorithms': ['StandardScaler']  # 这个可能分类错了，应该在 preprocessing
+        'algorithms': ['StandardScaler']  # ， preprocessing
     },
     'semi_supervised': {
         'display_name': 'Semi Supervised',
@@ -119,7 +119,7 @@ MISSING_ALGORITHMS = {
     },
 }
 
-# sklearn 模块名映射
+# sklearn module
 MODULE_MAPPING = {
     'linear_models': 'linear_model',
     'clustering': 'cluster',
@@ -128,50 +128,50 @@ MODULE_MAPPING = {
 }
 
 def camel_to_snake(name):
-    """驼峰转下划线"""
+    """"""
     s1 = re.sub('(.)([A-Z][a-z]+)', r'\1_\2', name)
     return re.sub('([a-z0-9])([A-Z])', r'\1_\2', s1).lower()
 
 def get_sklearn_module_name(category):
-    """获取 sklearn 模块名"""
+    """ sklearn module"""
     return MODULE_MAPPING.get(category, category)
 
 def generate_algorithm_smart(algo_name, category, mode, base_path):
     """
-    智能生成算法实现 - 使用算法分类器和模板生成器
+     - 
 
     Parameters
     ----------
     algo_name : str
-        算法名称，如 'KMeans'
+        ， 'KMeans'
     category : str
-        类别目录名，如 'clustering'
+        ， 'clustering'
     mode : str
-        模式，'FL', 'SS', 或 'SL'
+        pattern，'FL', 'SS',  'SL'
     base_path : str
-        基础路径
+        
     """
-    # 确定目标目录
+    # 
     mode_dir = os.path.join(base_path, f'secretlearn/{mode}/{category}')
     os.makedirs(mode_dir, exist_ok=True)
 
-    # 生成文件名
+    # file
     filename = camel_to_snake(algo_name) + '.py'
     filepath = os.path.join(mode_dir, filename)
 
-    # 检查文件是否已存在
+    # file
     if os.path.exists(filepath):
-        return False, "已存在"
+        return False, ""
 
-    # 获取 sklearn 模块名
+    #  sklearn module
     sklearn_module = get_sklearn_module_name(category)
 
-    # 使用算法分类器分类
+    # 
     try:
         characteristics = classify_algorithm(algo_name)
         template_type = characteristics.get('recommended_implementation', 'supervised_non_iterative')
 
-        # 生成模板
+        # 
         if mode.upper() == 'FL':
             code = generate_template(algo_name, sklearn_module, characteristics, 'fl')
         elif mode.upper() == 'SS':
@@ -179,19 +179,19 @@ def generate_algorithm_smart(algo_name, category, mode, base_path):
         elif mode.upper() == 'SL':
             code = generate_sl_template_smart(algo_name, sklearn_module, characteristics)
         else:
-            return False, f"未知模式: {mode}"
+            return False, f"pattern: {mode}"
 
-        # 写入文件
+        # file
         with open(filepath, 'w') as f:
             f.write(code)
 
         return True, template_type
 
     except Exception as e:
-        return False, f"错误: {str(e)}"
+        return False, f"error: {str(e)}"
 
 def generate_ss_template_smart(algo_name, module_name, characteristics):
-    """生成 SS 模式的智能模板"""
+    """ SS pattern"""
     is_unsupervised = characteristics.get('is_unsupervised', False)
     use_epochs = characteristics.get('use_epochs', False)
 
@@ -203,7 +203,7 @@ def generate_ss_template_smart(algo_name, module_name, characteristics):
         return generate_ss_non_iterative_template(algo_name, module_name)
 
 def generate_sl_template_smart(algo_name, module_name, characteristics):
-    """生成 SL 模式的智能模板"""
+    """ SL pattern"""
     is_unsupervised = characteristics.get('is_unsupervised', False)
     use_epochs = characteristics.get('use_epochs', False)
 
@@ -478,24 +478,24 @@ class SS{algo_name}:
 '''
 
 def generate_sl_unsupervised_template(algo_name, module_name):
-    """SL 无监督模板"""
-    # SL 模式对于无监督学习与 FL 类似
+    """SL """
+    # SL pattern FL 
     return generate_ss_unsupervised_template(algo_name, module_name).replace('SS', 'SL').replace('Secret Sharing', 'Split Learning').replace('SPU', 'PYU')
 
 def generate_sl_non_iterative_template(algo_name, module_name):
-    """SL 监督学习非迭代模板"""
-    # 基本复用 FL 逻辑
+    """SL """
+    #  FL logic
     return generate_ss_non_iterative_template(algo_name, module_name).replace('SS', 'SL').replace('Secret Sharing', 'Split Learning').replace('SPU', 'PYU')
 
 def generate_sl_iterative_template(algo_name, module_name):
-    """SL 监督学习迭代模板"""
+    """SL """
     return generate_ss_iterative_template(algo_name, module_name).replace('SS', 'SL').replace('Secret Sharing', 'Split Learning').replace('SPU', 'PYU')
 
 def main():
     base_path = '/Users/xingqiangchen/jax-sklearn'
 
     print("="*90)
-    print("智能批量生成算法 - 根据算法类型自动选择模板")
+    print("Batch - ")
     print("="*90)
     print()
 
@@ -510,25 +510,25 @@ def main():
         if not algorithms:
             continue
 
-        print(f"\n【{display_name}】 ({len(algorithms)} 个算法 × 3 模式 = {len(algorithms) * 3} 个文件)")
+        print(f"\n【{display_name}】 ({len(algorithms)}  × 3 pattern = {len(algorithms) * 3} file)")
 
         for algo_name in algorithms:
-            print(f"\n  算法: {algo_name}")
+            print(f"\n  : {algo_name}")
 
-            # 分类算法
+            # 
             try:
                 char = classify_algorithm(algo_name)
                 algo_type = char.get('recommended_implementation', 'unknown')
-                print(f"    类型: {algo_type}")
-                print(f"    签名: {char.get('fit_signature', 'unknown')}")
+                print(f"    : {algo_type}")
+                print(f"    : {char.get('fit_signature', 'unknown')}")
 
-                # 统计
+                # 
                 if algo_type not in stats_by_type:
                     stats_by_type[algo_type] = 0
                 stats_by_type[algo_type] += 1
 
             except Exception as e:
-                print(f"    ⚠️  分类失败: {e}")
+                print(f"    ⚠️  failed: {e}")
                 algo_type = 'unknown'
 
             for mode in ['FL', 'SS', 'SL']:
@@ -541,39 +541,39 @@ def main():
                     total_skipped += 1
 
     print("\n" + "="*90)
-    print("生成完成")
+    print("completed")
     print("="*90)
-    print(f"创建文件数: {total_created}")
-    print(f"跳过文件数: {total_skipped}")
-    print(f"总计: {total_created + total_skipped}")
+    print(f"file: {total_created}")
+    print(f"file: {total_skipped}")
+    print(f": {total_created + total_skipped}")
     print()
 
-    print("算法类型统计:")
+    print(":")
     for algo_type, count in sorted(stats_by_type.items(), key=lambda x: x[1], reverse=True):
-        print(f"  - {algo_type}: {count} 个")
+        print(f"  - {algo_type}: {count} ")
     print()
 
 if __name__ == '__main__':
-    # 提示用户确认
+    # 
     print("="*90)
-    print("⚠️  智能批量生成 - 使用算法分类器和模板生成器")
+    print("⚠️  Batch - ")
     print("="*90)
     print()
-    print("特点:")
-    print("  自动识别算法类型（无监督/监督/迭代）")
-    print("  根据类型选择正确的模板")
-    print("  正确的 fit 签名（fit(x) vs fit(x, y) vs fit(x, y, epochs)）")
-    print("  适当的方法（transform/predict/partial_fit）")
+    print(":")
+    print("  （//）")
+    print("  correct")
+    print("  correct fit （fit(x) vs fit(x, y) vs fit(x, y, epochs)）")
+    print("  （transform/predict/partial_fit）")
     print()
-    print("将创建约 234 个文件:")
+    print(" 234 file:")
     print("  - secretlearn/FL/*/")
     print("  - secretlearn/SS/*/")
     print("  - secretlearn/SL/*/")
     print()
 
-    response = input("是否继续？(yes/no): ")
+    response = input("？(yes/no): ")
     if response.lower() in ['yes', 'y']:
         main()
     else:
-        print("操作已取消")
+        print("")
 

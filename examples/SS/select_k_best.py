@@ -5,11 +5,19 @@
 """
 Usage Example for SSSelectKBest
 
+Usage:
+    Terminal 1: python select_k_best.py --party bob
+    Terminal 2: python select_k_best.py --party alice
+
 This example demonstrates how to use the privacy-preserving SelectKBest
 in SecretFlow's federated learning environment.
 """
 
 import numpy as np
+import sys
+import argparse
+import time
+import os
 
 try:
     import secretflow as sf
@@ -24,40 +32,74 @@ except ImportError:
 from secretlearn.SS.feature_selection.select_k_best import SSSelectKBest
 
 
+def parse_args():
+    parser = argparse.ArgumentParser(description='SS SSSelectKBest')
+    parser.add_argument('--party', required=True, choices=['alice', 'bob'])
+    parser.add_argument('--alice-addr', default='localhost:9494')
+    parser.add_argument('--bob-addr', default='localhost:9495')
+    return parser.parse_args()
+
+
 def main():
-    """Main example function"""
+    """Main function"""
+    args = parse_args()
+    party_name = args.party
+    
     print("="*70)
-    print(f" SSSelectKBest Usage Example")
+    print(f" SSSelectKBest - Party: {party_name.upper()}")
     print("="*70)
+    print(f"
+[{party_name}] PID: {os.getpid()}")
     
-    # Step 1: Initialize SecretFlow (PRODUCTION mode for SF 1.11+)
-    print("\n[1/5] Initializing SecretFlow...")
-    
-    # For single-node testing (simulated multi-party)
-    cluster_config = {
-        'parties': {
-            'alice': {'address': 'localhost:9497', 'listen_addr': '0.0.0.0:9497'},
-            'bob': {'address': 'localhost:9498', 'listen_addr': '0.0.0.0:9498'},
-            'carol': {'address': 'localhost:9499', 'listen_addr': '0.0.0.0:9499'},
-        },
-        'self_party': 'alice'
-    }
-    
-    # Initialize with PRODUCTION mode (SF 1.11+ removes Ray/SIMULATION mode)
-    sfd.init(DISTRIBUTION_MODE.PRODUCTION, cluster_config=cluster_config)
-    
-    # Create SPU device
-    spu_config = sf.utils.testing.cluster_def(
-        parties=['alice', 'bob', 'carol'],
-        runtime_config={'protocol': 'ABY3', 'field': 'FM64'}
-    )
-    spu = sf.SPU(spu_config)
-    
-    alice = sf.PYU('alice')
-    bob = sf.PYU('bob')
-    carol = sf.PYU('carol')
-    print("  ✓ SecretFlow initialized (PRODUCTION mode)")
-    
+    try:
+        print(f"
+[{party_name}] [1/5] Initializing...")
+        
+        # Cluster config
+        alice_host, alice_port = args.alice_addr.split(':')
+        bob_host, bob_port = args.bob_addr.split(':')
+        
+        cluster_config = {
+            'parties': {
+                'alice': {'address': f'{alice_host}:{alice_port}', 'listen_addr': f'0.0.0.0:{alice_port}'},
+                'bob': {'address': f'{bob_host}:{bob_port}', 'listen_addr': f'0.0.0.0:{bob_port}'},
+            },
+            'self_party': party_name
+        }
+        
+        sfd.init(DISTRIBUTION_MODE.PRODUCTION, cluster_config=cluster_config)
+        
+        alice = sf.PYU('alice')
+        bob = sf.PYU('bob')
+        
+        # Sync mechanism
+        ready_file = f'/tmp/sf_{party_name}.lock'
+        other_ready = f'/tmp/sf_{"bob" if party_name == "alice" else "alice"}.lock'
+        open(ready_file, 'w').close()
+        
+        print(f"[{party_name}] Waiting for peer...")
+        for _ in range(30):
+            if os.path.exists(other_ready):
+                break
+            time.sleep(1)
+        else:
+            print(f"[{party_name}] ✗ Timeout")
+            sys.exit(1)
+        
+        time.sleep(1)
+        
+        # SPU
+        spu = sf.SPU(sf.utils.testing.cluster_def(['alice', 'bob'], runtime_config={'protocol': 'SEMI2K'}))
+        print(f"[{party_name}] ✓ Initialized")
+        try:
+            os.remove(ready_file)
+        except:
+            pass
+        
+        if party_name == 'alice':
+            # Alice runs the training
+            print(f"
+[{party_name}] [2/5] Preparing data...")    
     # Step 2: Create sample data
     print("\n[2/5] Creating sample data...")
     np.random.seed(42)
@@ -79,8 +121,7 @@ def main():
     fed_X = FedNdarray(
         partitions={
             alice: alice(lambda x: x)(X_alice),
-            bob: bob(lambda x: x)(X_bob),
-            carol: carol(lambda x: x)(X_carol),
+            bob: bob(lambda x: x)(X_bob): carol(lambda x: x)(X_carol),
         },
         partition_way=PartitionWay.VERTICAL
     )
@@ -104,6 +145,13 @@ def main():
     print("  ✓ Model state stored in SPU (encrypted)")
     print("  ✓ Privacy: Fully protected by MPC")
     print(f"  ✓ Performance: {training_time*1000:.2f}ms")
+    else:
+        # Bob waits and participates
+        print(f"
+[{{party_name}}] Waiting for alice...")
+        time.sleep(300)
+        print(f"[{{party_name}}] ✓ Done")
+
     
     # Cleanup
     sf.shutdown()

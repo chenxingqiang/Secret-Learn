@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-重新生成所有有问题的 example 文件
+all example file
 """
 
 import os
@@ -12,32 +12,32 @@ sys.path.insert(0, '/Users/xingqiangchen/jax-sklearn')
 from secretlearn.algorithm_classifier import classify_algorithm
 
 def camel_to_snake(name):
-    """驼峰转下划线"""
+    """"""
     s1 = re.sub('(.)([A-Z][a-z]+)', r'\1_\2', name)
     return re.sub('([a-z0-9])([A-Z])', r'\1_\2', s1).lower()
 
 def snake_to_camel(snake_str):
-    """下划线转驼峰"""
+    """"""
     components = snake_str.split('_')
     return ''.join(x.title() for x in components)
 
 def generate_example(algo_name, category, mode):
     """
-    生成正确的 example 文件
+    correct example file
     
     Parameters
     ----------
     algo_name : str
-        驼峰命名的算法名，如 'LinearSVC'
+        ， 'LinearSVC'
     category : str
-        下划线命名的类别，如 'svm'
+        ， 'svm'
     mode : str
         'FL', 'SS', or 'SL'
     """
     snake_name = camel_to_snake(algo_name)
     class_name = f"{mode}{algo_name}"
     
-    # 分类算法
+    # 
     try:
         char = classify_algorithm(algo_name)
         is_unsupervised = char.get('is_unsupervised', False)
@@ -46,11 +46,11 @@ def generate_example(algo_name, category, mode):
         is_unsupervised = False
         use_epochs = False
     
-    # 根据模式确定端口
+    # pattern
     port_base = {'FL': 9491, 'SS': 9494, 'SL': 9497}
     ports = [port_base[mode] + i for i in range(3)]
     
-    # 根据模式确定初始化代码
+    # patterninitialization
     if mode == 'FL':
         init_code = """    # Create devices dict for FL mode
     devices = {"alice": alice, "bob": bob, "carol": carol}
@@ -63,13 +63,13 @@ def generate_example(algo_name, category, mode):
     devices = {"alice": alice, "bob": bob, "carol": carol}
     """
     
-    # 根据模式确定实例化代码
+    # pattern
     if mode == 'FL' or mode == 'SL':
         model_init = f"model = {class_name}(devices)"
     else:  # SS
         model_init = f"model = {class_name}(spu)"
     
-    # 生成数据和 fit 代码
+    #  fit 
     if is_unsupervised:
         data_code = """    X = np.random.randn(n_samples, n_features).astype(np.float32)
     # No labels needed for unsupervised learning"""
@@ -229,16 +229,16 @@ if __name__ == "__main__":
     return template
 
 def get_category_from_import(content):
-    """从 import 语句中提取类别"""
+    """ import Extract"""
     match = re.search(r'from secretlearn\.[A-Z]+\.(\w+)\.', content)
     if match:
         return match.group(1)
     return None
 
 def regenerate_problematic_examples(base_path):
-    """重新生成有问题的 example 文件"""
+    """ example file"""
     print("="*90)
-    print("重新生成有问题的 Example 文件")
+    print(" Example file")
     print("="*90)
     print()
     
@@ -250,7 +250,7 @@ def regenerate_problematic_examples(base_path):
         if not examples_path.exists():
             continue
         
-        print(f"\n【{mode} 模式】")
+        print(f"\n【{mode} pattern】")
         mode_count = 0
         
         for py_file in sorted(examples_path.glob('*.py')):
@@ -258,26 +258,26 @@ def regenerate_problematic_examples(base_path):
                 continue
             
             try:
-                # 读取文件
+                # file
                 with open(py_file, 'r', encoding='utf-8') as f:
                     content = f.read()
                 
-                # 检查是否有问题
+                # 
                 has_issue = False
                 
-                # 1. 检查未替换的模板变量
+                # 1. 
                 if '{algo_name}' in content:
                     has_issue = True
                 
-                # 2. 检查语法错误（简单检查）
+                # 2. error（）
                 try:
                     compile(content, py_file.name, 'exec')
                 except SyntaxError:
                     has_issue = True
                 
-                # 3. 检查导入语句中的类名错误
-                # 例如：from secretlearn.SL.svm.linear_svc import FLLinearSVC
-                # 应该是：from secretlearn.SL.svm.linear_svc import SLLinearSVC
+                # 3. class nameerror
+                # ：from secretlearn.SL.svm.linear_svc import FLLinearSVC
+                # ：from secretlearn.SL.svm.linear_svc import SLLinearSVC
                 import_match = re.search(
                     rf'from secretlearn\.{mode}\.(\w+)\.(\w+) import ([A-Z]\w+)',
                     content
@@ -291,16 +291,16 @@ def regenerate_problematic_examples(base_path):
                 if not has_issue:
                     continue
                 
-                # 提取信息
+                # Extractinfo
                 filename = py_file.stem
                 algo_name = snake_to_camel(filename)
                 category = get_category_from_import(content)
                 
                 if not category:
-                    print(f"  ⚠️  无法确定类别: {py_file.name}")
+                    print(f"  ⚠️  : {py_file.name}")
                     continue
                 
-                # 重新生成
+                # 
                 new_content = generate_example(algo_name, category, mode)
                 
                 with open(py_file, 'w', encoding='utf-8') as f:
@@ -316,40 +316,40 @@ def regenerate_problematic_examples(base_path):
                 print(f"   {py_file.name}: {str(e)}")
         
         if mode_count > 10:
-            print(f"  ... 还有 {mode_count - 10} 个文件已重新生成")
+            print(f"  ...  {mode_count - 10} file")
         
         if mode_count > 0:
-            print(f"  {mode} 小计: {mode_count} 个文件")
+            print(f"  {mode} : {mode_count} file")
     
-    print(f"\n总计重新生成: {regenerated} 个文件")
+    print(f"\n: {regenerated} file")
     return regenerated
 
 def main():
     base_path = '/Users/xingqiangchen/jax-sklearn'
     
     print("="*90)
-    print("Example 文件重新生成工具")
+    print("Example file")
     print("="*90)
     print()
-    print("将重新生成有问题的 example 文件:")
-    print("  - 修复模板变量")
-    print("  - 修复代码结构")
-    print("  - 修复导入语句")
-    print("  - 确保语法正确")
+    print(" example file:")
+    print("  - ")
+    print("  - ")
+    print("  - ")
+    print("  - correct")
     print()
     
-    response = input("是否继续？(yes/no): ")
+    response = input("？(yes/no): ")
     if response.lower() not in ['yes', 'y']:
-        print("操作已取消")
+        print("")
         return
     
-    # 重新生成
+    # 
     count = regenerate_problematic_examples(base_path)
     
     print("\n" + "="*90)
-    print("Example 文件重新生成完成！")
+    print("Example filecompleted！")
     print("="*90)
-    print(f"重新生成: {count} 个文件")
+    print(f": {count} file")
     print()
 
 if __name__ == '__main__':

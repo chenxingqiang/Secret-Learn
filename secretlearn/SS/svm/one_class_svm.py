@@ -58,8 +58,16 @@ class SSOneClassSVM:
             model.fit(X)
             return model
         
-        X_spu = x.to(self.spu)
-        self.model = self.spu(_spu_fit)(X_spu, **self.kwargs)
+        # Convert FedNdarray partitions to SPU objects
+
+        
+        x_parts = [x.partitions[pyu].to(self.spu) for pyu in x.partitions]
+
+        
+        
+
+        
+        self.model = self.spu(_spu_fit)(x_parts, **self.kwargs)
         self._is_fitted = True
         return self
     
@@ -70,8 +78,31 @@ class SSOneClassSVM:
         if isinstance(x, VDataFrame):
             x = x.values
         
-        X_spu = x.to(self.spu)
-        return self.spu(lambda m, X: m.transform(X))(self.model, X_spu)
+        # Convert FedNdarray partitions to SPU
+
+        
+        x_parts = [x.partitions[pyu].to(self.spu) for pyu in x.partitions]
+
+        
+        
+
+        
+        def _spu_transform(m, X_parts):
+
+        
+            import jax.numpy as jnp
+
+        
+            X = jnp.concatenate(X_parts, axis=1) if len(X_parts) > 1 else X_parts[0]
+
+        
+            return m.transform(X)
+
+        
+        
+
+        
+        return self.spu(_spu_transform)(self.model, x_parts)
     
     def predict(self, x: 'Union[FedNdarray, VDataFrame]'):
         """Predict (for clustering/anomaly detection)"""
@@ -80,5 +111,28 @@ class SSOneClassSVM:
         if isinstance(x, VDataFrame):
             x = x.values
         
-        X_spu = x.to(self.spu)
-        return self.spu(lambda m, X: m.predict(X))(self.model, X_spu)
+        # Convert FedNdarray partitions to SPU
+
+        
+        x_parts = [x.partitions[pyu].to(self.spu) for pyu in x.partitions]
+
+        
+        
+
+        
+        def _spu_predict(m, X_parts):
+
+        
+            import jax.numpy as jnp
+
+        
+            X = jnp.concatenate(X_parts, axis=1) if len(X_parts) > 1 else X_parts[0]
+
+        
+            return m.predict(X)
+
+        
+        
+
+        
+        return self.spu(_spu_predict)(self.model, x_parts)

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-统计 sklearn 中每个模块的算法数量
+ sklearn module
 """
 
 import inspect
@@ -17,7 +17,7 @@ from sklearn import (
 )
 
 def is_estimator(obj):
-    """检查对象是否是 sklearn 估计器"""
+    """ sklearn """
     try:
         return (
             inspect.isclass(obj) and 
@@ -29,7 +29,7 @@ def is_estimator(obj):
         return False
 
 def count_algorithms_in_module(module, module_name):
-    """统计模块中的算法数量"""
+    """module"""
     algorithms = []
     
     for name, obj in inspect.getmembers(module):
@@ -38,7 +38,7 @@ def count_algorithms_in_module(module, module_name):
     
     return sorted(algorithms)
 
-# 定义要统计的模块
+# module
 modules = {
     'Calibration': calibration,
     'Clustering': cluster,
@@ -75,7 +75,7 @@ modules = {
 }
 
 print("="*80)
-print("sklearn 算法统计")
+print("sklearn ")
 print("="*80)
 print()
 
@@ -90,15 +90,15 @@ for category, module in modules.items():
     if count > 0:
         category_stats.append((category, count, algorithms))
 
-# 按数量排序
+# 
 category_stats.sort(key=lambda x: x[1], reverse=True)
 
-# 打印统计结果
-print(f"{'类别':<25} {'数量':>6}  示例算法")
+# 
+print(f"{'':<25} {'':>6}  examples")
 print("-"*80)
 
 for category, count, algorithms in category_stats:
-    # 显示前3个算法作为示例
+    # 3examples
     examples = ', '.join(algorithms[:3])
     if len(algorithms) > 3:
         examples += f', ... (+{len(algorithms)-3} more)'
@@ -106,22 +106,22 @@ for category, count, algorithms in category_stats:
     print(f"{category:<25} {count:>6}  {examples}")
 
 print("-"*80)
-print(f"{'总计':<25} {total_count:>6}")
+print(f"{'':<25} {total_count:>6}")
 print()
 
-# 详细列表
+# 
 print("\n" + "="*80)
-print("详细算法列表")
+print("")
 print("="*80)
 
 for category, count, algorithms in category_stats:
-    print(f"\n【{category}】 ({count} 个算法)")
+    print(f"\n【{category}】 ({count} )")
     print("-" * 60)
     for i, algo in enumerate(algorithms, 1):
         print(f"  {i:2d}. {algo}")
 
 print("\n" + "="*80)
-print(f"sklearn 版本: {sklearn.__version__}")
-print(f"总算法数: {total_count}")
+print(f"sklearn : {sklearn.__version__}")
+print(f": {total_count}")
 print("="*80)
 

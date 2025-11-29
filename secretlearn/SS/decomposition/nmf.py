@@ -62,9 +62,19 @@ class SSNmf:
             model.fit(X, y)
             return model
         
-        X_spu = x.to(self.spu)
-        y_spu = y.to(self.spu)
-        self.model = self.spu(_spu_fit)(X_spu, y_spu, **self.kwargs)
+        # Convert FedNdarray partitions to SPU objects
+
+        
+        x_parts = [x.partitions[pyu].to(self.spu) for pyu in x.partitions]
+
+        
+        y_parts = [y.partitions[pyu].to(self.spu) for pyu in y.partitions]
+
+        
+        
+
+        
+        self.model = self.spu(_spu_fit)(x_parts, y_parts, **self.kwargs)
         self._is_fitted = True
         return self
     
@@ -76,5 +86,28 @@ class SSNmf:
         if isinstance(x, VDataFrame):
             x = x.values
         
-        X_spu = x.to(self.spu)
-        return self.spu(lambda m, X: m.predict(X))(self.model, X_spu)
+        # Convert FedNdarray partitions to SPU
+
+        
+        x_parts = [x.partitions[pyu].to(self.spu) for pyu in x.partitions]
+
+        
+        
+
+        
+        def _spu_predict(m, X_parts):
+
+        
+            import jax.numpy as jnp
+
+        
+            X = jnp.concatenate(X_parts, axis=1) if len(X_parts) > 1 else X_parts[0]
+
+        
+            return m.predict(X)
+
+        
+        
+
+        
+        return self.spu(_spu_predict)(self.model, x_parts)
