@@ -10,16 +10,16 @@ maintainers = [
     {name = "Secret-Learn developers", email="joy6677@outlook.com"},
 ]
 dependencies = [
-  "numpy>=1.22.0",
+  "numpy>=1.22.0,<3.0",
   "scipy>=1.8.0",
   "joblib>=1.2.0",
   "threadpoolctl>=3.1.0",
   "jax>=0.4.20",
   "jaxlib>=0.4.20",
-  "jax-sklearn>=0.1.0",
-  "secretflow>=0.7.0",
+  "jax-sklearn>=0.1.5",
+  "secretflow>=1.0.0",
 ]
-requires-python = ">=3.10"
+requires-python = ">=3.10,<3.12"
 license = {text = "BSD-3-Clause"}
 classifiers=[
   "License :: OSI Approved :: BSD License",
@@ -29,7 +29,6 @@ classifiers=[
   "Programming Language :: Python :: 3",
   "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
-  "Programming Language :: Python :: 3.12",
   "Programming Language :: Python :: Implementation :: CPython",
   "Topic :: Software Development",
   "Topic :: Scientific/Engineering",
@@ -53,13 +52,14 @@ documentation = "https://github.com/chenxingqiang/Secret-Learn#readme"
 
 [project.optional-dependencies]
 all = [
-    "jax-sklearn>=0.1.0",
-    "secretflow>=0.7.7b0",
+    "jax-sklearn>=0.1.5",
+    "secretflow>=1.0.0",
 ]
-jax-sklearn = ["jax-sklearn>=0.1.0"]
-secretflow = ["secretflow>=0.7.7b0"]
+jax-sklearn = ["jax-sklearn>=0.1.5"]
+secretflow = ["secretflow>=1.0.0"]
 jax-cpu = ["jax[cpu]>=0.4.20"]
-jax-gpu = ["jax[gpu]>=0.4.20"]
+jax-cuda12 = ["jax[cuda12]>=0.4.20"]
+jax-tpu = ["jax[tpu]>=0.4.20"]
 benchmark = [
     "matplotlib>=3.5.0",
     "pandas>=1.4.0",
