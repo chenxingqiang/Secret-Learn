@@ -13,6 +13,7 @@
 ---
 
 ## 🎯 What is Secret-Learn?
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/chenxingqiang/Secret-Learn)
 
 **Secret-Learn** is a comprehensive privacy-preserving machine learning library that combines:
 - 🚀 **JAX-sklearn**: JAX-accelerated sklearn implementation (5x+ faster)
